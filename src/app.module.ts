@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { GnosisPayModule } from './gnosispay/gnosispay.module';
 import { EmailModule } from './email/email.module';
+import { SmsModule } from './sms/sms.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { EmailModule } from './email/email.module';
     UsersModule,
     GnosisPayModule,
     EmailModule,
+    SmsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
