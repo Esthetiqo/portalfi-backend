@@ -1,0 +1,341 @@
+// ==================================================================================
+// EJEMPLO SUPER SIMPLIFICADO - Todo el flujo KYC en un solo archivo
+// ==================================================================================
+
+import { useState } from 'react';
+import { useAccount, useConnect, useSignMessage } from 'wagmi';
+import SumsubWebSdk from '@sumsub/websdk-react';
+import { SiweMessage } from 'siwe';
+
+// ==================== CONFIGURACIÓN ====================
+const API_URL = 'http://localhost:3000/gnosispay';
+
+// ==================== COMPONENTE PRINCIPAL ====================
+export function SimpleKYCFlow() {
+  const [step, setStep] = useState(1);
+  const [token, setToken] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState('');
+  const [sumsubToken, setSumsubToken] = useState('');
+
+  const { address } = useAccount();
+  const { connect, connectors } = useConnect();
+  const { signMessageAsync } = useSignMessage();
+
+  // ==================== PASO 1: CONECTAR WALLET ====================
+  const handleConnectWallet = () => {
+    connect({ connector: connectors[0] }); // MetaMask
+    setStep(2);
+  };
+
+  // ==================== PASO 2: SIGN IN WITH ETHEREUM ====================
+  const handleSIWE = async () => {
+    try {
+      // 1. Obtener nonce
+      const { nonce } = await fetch(`${API_URL}/auth/nonce`).then(r => r.json());
+
+      // 2. Crear mensaje SIWE
+      const siweMessage = new SiweMessage({
+        domain: window.location.host,
+        address: address!,
+        statement: 'Sign in to GnosisPay',
+        uri: window.location.origin,
+        version: '1',
+        chainId: 100,
+        nonce,
+      });
+
+      // 3. Firmar con wallet
+      const signature = await signMessageAsync({
+        message: siweMessage.prepareMessage(),
+      });
+
+      // 4. Verificar firma y obtener JWT
+      const { token: jwtToken } = await fetch(`${API_URL}/auth/challenge`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: siweMessage.prepareMessage(),
+          signature,
+        }),
+      }).then(r => r.json());
+
+      setToken(jwtToken);
+      setStep(3);
+    } catch (error) {
+      console.error('SIWE failed:', error);
+    }
+  };
+
+  // ==================== PASO 3: REGISTRO ====================
+  const handleRegister = async () => {
+    try {
+      const { token: newToken } = await fetch(`${API_URL}/auth/signup`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ authEmail: email }),
+      }).then(r => r.json());
+
+      setToken(newToken);
+      setStep(4);
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
+  };
+
+  // ==================== PASO 4: CUESTIONARIO AML ====================
+  const handleAML = async (sourceOfFunds: string) => {
+    try {
+      await fetch(`${API_URL}/kyc/answers`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          answers: [
+            { question: 'What is your source of funds?', answer: sourceOfFunds }
+          ],
+        }),
+      });
+
+      setStep(5);
+    } catch (error) {
+      console.error('AML failed:', error);
+    }
+  };
+
+  // ==================== PASO 5: ENVIAR OTP ====================
+  const handleSendOTP = async () => {
+    try {
+      await fetch(`${API_URL}/kyc/phone/send-otp`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ phone }),
+      });
+
+      setStep(6);
+    } catch (error) {
+      console.error('Send OTP failed:', error);
+    }
+  };
+
+  // ==================== PASO 6: VERIFICAR OTP ====================
+  const handleVerifyOTP = async () => {
+    try {
+      await fetch(`${API_URL}/kyc/phone/verify-otp`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ otp }),
+      });
+
+      // Obtener token de Sumsub
+      const { token: sToken } = await fetch(`${API_URL}/kyc/access-token`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      }).then(r => r.json());
+
+      setSumsubToken(sToken);
+      setStep(7);
+    } catch (error) {
+      console.error('Verify OTP failed:', error);
+    }
+  };
+
+  // ==================== PASO 7: SUMSUB SDK ====================
+  const sumsubHandler = sumsubToken && SumsubWebSdk(
+    sumsubToken,
+    email,
+    {
+      lang: 'en',
+      onMessage: (type, payload) => {
+        console.log('Sumsub:', type, payload);
+        if (type === 'idCheck.applicantReviewed') {
+          setStep(8); // Ir a estado final
+        }
+      },
+      onError: (error) => console.error('Sumsub error:', error),
+    }
+  );
+
+  // ==================== RENDERIZADO SEGÚN PASO ====================
+  return (
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <h1 className="text-2xl font-bold mb-6">GnosisPay KYC</h1>
+
+      {/* PASO 1: CONECTAR WALLET */}
+      {step === 1 && (
+        <div>
+          <h2 className="text-xl mb-4">Step 1: Connect Wallet</h2>
+          <button
+            onClick={handleConnectWallet}
+            className="w-full bg-blue-600 text-white py-2 rounded"
+          >
+            Connect MetaMask
+          </button>
+        </div>
+      )}
+
+      {/* PASO 2: SIWE */}
+      {step === 2 && (
+        <div>
+          <h2 className="text-xl mb-4">Step 2: Sign In</h2>
+          <p className="mb-4 text-sm">Connected: {address?.slice(0, 6)}...{address?.slice(-4)}</p>
+          <button
+            onClick={handleSIWE}
+            className="w-full bg-blue-600 text-white py-2 rounded"
+          >
+            Sign with Ethereum
+          </button>
+        </div>
+      )}
+
+      {/* PASO 3: REGISTRO */}
+      {step === 3 && (
+        <div>
+          <h2 className="text-xl mb-4">Step 3: Register</h2>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="your@email.com"
+            className="w-full border p-2 rounded mb-4"
+          />
+          <button
+            onClick={handleRegister}
+            className="w-full bg-blue-600 text-white py-2 rounded"
+          >
+            Register
+          </button>
+        </div>
+      )}
+
+      {/* PASO 4: AML */}
+      {step === 4 && (
+        <div>
+          <h2 className="text-xl mb-4">Step 4: Source of Funds</h2>
+          <select
+            onChange={(e) => handleAML(e.target.value)}
+            className="w-full border p-2 rounded"
+          >
+            <option value="">Select...</option>
+            <option value="Employment income">Employment income</option>
+            <option value="Business income">Business income</option>
+            <option value="Savings">Savings</option>
+            <option value="Investments">Investments</option>
+          </select>
+        </div>
+      )}
+
+      {/* PASO 5: ENVIAR OTP */}
+      {step === 5 && (
+        <div>
+          <h2 className="text-xl mb-4">Step 5: Phone Verification</h2>
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="+1234567890"
+            className="w-full border p-2 rounded mb-4"
+          />
+          <button
+            onClick={handleSendOTP}
+            className="w-full bg-blue-600 text-white py-2 rounded"
+          >
+            Send OTP
+          </button>
+        </div>
+      )}
+
+      {/* PASO 6: VERIFICAR OTP */}
+      {step === 6 && (
+        <div>
+          <h2 className="text-xl mb-4">Step 6: Enter OTP</h2>
+          <p className="text-sm mb-4">Code sent to {phone}</p>
+          <input
+            type="text"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            placeholder="123456"
+            maxLength={6}
+            className="w-full border p-2 rounded mb-4 text-center text-2xl"
+          />
+          <button
+            onClick={handleVerifyOTP}
+            className="w-full bg-blue-600 text-white py-2 rounded"
+          >
+            Verify
+          </button>
+        </div>
+      )}
+
+      {/* PASO 7: SUMSUB */}
+      {step === 7 && (
+        <div>
+          <h2 className="text-xl mb-4">Step 7: Upload Documents</h2>
+          <div className="border rounded p-4">
+            {sumsubHandler}
+          </div>
+        </div>
+      )}
+
+      {/* PASO 8: COMPLETADO */}
+      {step === 8 && (
+        <div className="text-center">
+          <h2 className="text-xl mb-4 text-green-600">✅ KYC Complete!</h2>
+          <p className="mb-4">Your documents are under review.</p>
+          <p className="text-sm text-gray-600">
+            This typically takes 1-48 hours.
+          </p>
+        </div>
+      )}
+
+      {/* INDICADOR DE PROGRESO */}
+      <div className="mt-6">
+        <div className="flex justify-between text-xs text-gray-600 mb-2">
+          {['Wallet', 'Sign', 'Register', 'AML', 'Phone', 'OTP', 'Docs', 'Done'].map((label, i) => (
+            <span key={i} className={step > i ? 'text-blue-600 font-bold' : ''}>
+              {label}
+            </span>
+          ))}
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2">
+          <div
+            className="bg-blue-600 h-2 rounded-full transition-all"
+            style={{ width: `${(step / 8) * 100}%` }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ==================================================================================
+// RESUMEN DE LO QUE HACE ESTE COMPONENTE:
+// ==================================================================================
+//
+// 1. Conecta wallet del usuario (MetaMask)
+// 2. Usuario firma mensaje SIWE
+// 3. Backend verifica firma y devuelve JWT token
+// 4. Usuario se registra con email
+// 5. Usuario responde cuestionario AML
+// 6. Usuario verifica teléfono (OTP por SMS)
+// 7. Usuario sube documentos con Sumsub SDK
+// 8. KYC completado, espera aprobación
+//
+// TODO LO QUE NECESITAS:
+// - Tu backend NestJS corriendo en http://localhost:3000 ✅ (Ya lo tienes)
+// - Usuario con wallet (MetaMask) ✅
+// - NO necesitas API keys de GnosisPay ✅
+// - NO necesitas cuenta de Sumsub ✅
+//
+// ==================================================================================

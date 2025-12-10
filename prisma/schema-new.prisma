@@ -1,0 +1,642 @@
+// GnosisPay Backend - Complete Database Schema
+// Includes: Users, Authentication, GnosisPay integration, Logs, and Audit
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== USER MANAGEMENT ====================
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Hashed with bcrypt
+  name      String?
+  role      Role     @default(USER)
+  isActive  Boolean  @default(true)
+
+  // Profile details
+  firstName String?
+  lastName  String?
+  phone     String?
+  avatar    String?
+
+  // Metadata
+  lastLoginAt DateTime?
+  emailVerifiedAt DateTime?
+  phoneVerifiedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  gnosisPayUsers GnosisPayUser[]
+  refreshTokens  RefreshToken[]
+  apiKeys        ApiKey[]
+  sessions       Session[]
+  auditLogs      AuditLog[]
+  activityLogs   ActivityLog[]
+  errorLogs      ErrorLog[]
+  webhooks       Webhook[]
+
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+// ==================== AUTHENTICATION ====================
+
+// Refresh tokens for JWT rotation
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  token     String   @unique
+  expiresAt DateTime
+  isRevoked Boolean  @default(false)
+
+  // Device/Client info
+  userAgent String?
+  ipAddress String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+// API Keys for programmatic access
+model ApiKey {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name        String   // User-friendly name
+  key         String   @unique // Hashed API key
+  prefix      String   // First 8 chars for identification (e.g., "gp_live_")
+
+  // Permissions
+  scopes      String[] // Array of allowed scopes
+
+  // Status
+  isActive    Boolean  @default(true)
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([key])
+  @@index([prefix])
+  @@map("api_keys")
+}
+
+// Active sessions for tracking
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  sessionId String   @unique
+
+  // Session data
+  userAgent String?
+  ipAddress String?
+  device    String?
+  location  String?
+
+  // Status
+  isActive  Boolean  @default(true)
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([sessionId])
+  @@index([isActive])
+  @@map("sessions")
+}
+
+// ==================== GNOSISPAY INTEGRATION ====================
+
+// GnosisPay User data stored locally
+model GnosisPayUser {
+  id                      String    @id @default(uuid())
+  userId                  String
+  user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // GnosisPay specific fields
+  gnosisPayId             String    @unique // GnosisPay user ID
+  gnosisPayToken          String?   // Encrypted token
+  tokenExpiresAt          DateTime?
+  tokenRefreshedAt        DateTime?
+
+  // User details from GnosisPay
+  email                   String?
+  phone                   String?
+  firstName               String?
+  lastName                String?
+  address1                String?
+  address2                String?
+  city                    String?
+  postalCode              String?
+  state                   String?
+  country                 String?
+  nationalityCountry      String?
+
+  // KYC status
+  kycStatus               String    @default("notStarted")
+  isSourceOfFundsAnswered Boolean   @default(false)
+  isPhoneValidated        Boolean   @default(false)
+
+  // Account status
+  accountStatus           String    @default("ACTIVE")
+  partnerId               String?
+
+  // Sync metadata
+  lastSyncedAt            DateTime?
+  syncErrors              Int       @default(0)
+
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  // Relations
+  cards                   GnosisPayCard[]
+  safeWallets             SafeWallet[]
+  signInWallets           SignInWallet[]
+  cardOrders              CardOrder[]
+  bankingDetails          BankingDetails?
+
+  @@index([userId])
+  @@index([gnosisPayId])
+  @@index([email])
+  @@map("gnosispay_users")
+}
+
+// Card information
+model GnosisPayCard {
+  id              String         @id @default(uuid())
+  gnosisPayUserId String
+  gnosisPayUser   GnosisPayUser  @relation(fields: [gnosisPayUserId], references: [id], onDelete: Cascade)
+
+  // Card details
+  cardId          String         @unique // GnosisPay card ID
+  cardToken       String?
+  lastFourDigits  String
+  isVirtual       Boolean        @default(false)
+  activatedAt     DateTime?
+
+  // Status tracking
+  status          String         @default("inactive") // active, frozen, lost, cancelled
+  statusChangedAt DateTime?
+
+  // Metadata
+  nickname        String?        // User-defined nickname
+  lastUsedAt      DateTime?
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([gnosisPayUserId])
+  @@index([cardId])
+  @@index([status])
+  @@map("gnosispay_cards")
+}
+
+// Safe wallet information
+model SafeWallet {
+  id              String         @id @default(uuid())
+  gnosisPayUserId String
+  gnosisPayUser   GnosisPayUser  @relation(fields: [gnosisPayUserId], references: [id], onDelete: Cascade)
+
+  address         String         @unique
+  chainId         String?
+  tokenSymbol     String?
+  fiatSymbol      String?
+  isDeployed      Boolean        @default(false)
+  deployedAt      DateTime?
+
+  // Balance tracking (cached)
+  balanceTotal    String?
+  balanceSpendable String?
+  balancePending  String?
+  balanceUpdatedAt DateTime?
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([gnosisPayUserId])
+  @@index([address])
+  @@map("safe_wallets")
+}
+
+// Sign-in wallet (EOA)
+model SignInWallet {
+  id              String         @id @default(uuid())
+  gnosisPayUserId String
+  gnosisPayUser   GnosisPayUser  @relation(fields: [gnosisPayUserId], references: [id], onDelete: Cascade)
+
+  walletId        String         @unique // GnosisPay wallet ID
+  address         String         @unique
+
+  isPrimary       Boolean        @default(false)
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([gnosisPayUserId])
+  @@index([address])
+  @@map("signin_wallets")
+}
+
+// Banking/IBAN details
+model BankingDetails {
+  id                  String         @id @default(uuid())
+  gnosisPayUserId     String         @unique
+  gnosisPayUser       GnosisPayUser  @relation(fields: [gnosisPayUserId], references: [id], onDelete: Cascade)
+
+  moneriumIban        String?
+  moneriumBic         String?
+  moneriumIbanStatus  String?
+  moneriumProfileId   String?
+
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  @@map("banking_details")
+}
+
+// Physical card orders
+model CardOrder {
+  id                     String         @id @default(uuid())
+  gnosisPayUserId        String
+  gnosisPayUser          GnosisPayUser  @relation(fields: [gnosisPayUserId], references: [id], onDelete: Cascade)
+
+  orderId                String         @unique // GnosisPay order ID
+  status                 String         // PENDINGTRANSACTION, READY, CARDCREATED, etc.
+  personalizationSource  String         // KYC or ENS
+
+  // Shipping address
+  embossedName           String?
+  address1               String?
+  address2               String?
+  city                   String?
+  country                String?
+  postalCode             String?
+  state                  String?
+
+  // Pricing
+  couponCode             String?
+  totalAmountEUR         Float?
+  totalDiscountEUR       Float          @default(0)
+
+  // Transaction details
+  transactionHash        String?
+  isVirtual              Boolean        @default(false)
+
+  // Tracking
+  statusHistory          Json?          // Array of status changes
+  estimatedDelivery      DateTime?
+  deliveredAt            DateTime?
+
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+
+  @@index([gnosisPayUserId])
+  @@index([orderId])
+  @@index([status])
+  @@map("card_orders")
+}
+
+// ==================== WEBHOOKS ====================
+
+model Webhook {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  url         String
+  events      String[]  // Array of event types to listen to
+  secret      String?   // Webhook secret for signature verification
+  isActive    Boolean   @default(true)
+
+  // Configuration
+  description String?
+  headers     Json?     // Custom headers to send
+
+  // Statistics
+  totalDeliveries     Int       @default(0)
+  successfulDeliveries Int      @default(0)
+  failedDeliveries    Int       @default(0)
+  lastTriggeredAt     DateTime?
+  lastSuccessAt       DateTime?
+  lastFailureAt       DateTime?
+  lastFailureReason   String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  deliveries  WebhookDelivery[]
+
+  @@index([userId])
+  @@index([isActive])
+  @@map("webhooks")
+}
+
+model WebhookDelivery {
+  id          String    @id @default(uuid())
+  webhookId   String
+  webhook     Webhook   @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  event       String
+  payload     Json
+
+  // Delivery attempt
+  responseStatus    Int?
+  responseBody      String?
+  responseHeaders   Json?
+  deliveredAt       DateTime?
+
+  // Retry logic
+  attemptCount      Int       @default(0)
+  maxAttempts       Int       @default(3)
+  nextRetryAt       DateTime?
+
+  status      String    // pending, delivered, failed, cancelled
+  errorMessage String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([webhookId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("webhook_deliveries")
+}
+
+// ==================== AUDIT & LOGGING SYSTEM ====================
+
+// Complete audit trail of all actions
+model AuditLog {
+  id          String    @id @default(uuid())
+
+  // Who
+  userId      String?
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  actorType   String    // user, system, api_key, webhook
+  actorId     String?   // ID of the actor (userId, apiKeyId, etc)
+
+  // What
+  action      String    // create, update, delete, read, login, logout, etc.
+  resource    String    // user, card, transaction, webhook, etc.
+  resourceId  String?   // ID of the affected resource
+
+  // Details
+  description String?
+  changes     Json?     // Before/after data for updates
+  metadata    Json?     // Additional context
+
+  // How/Where
+  ipAddress   String?
+  userAgent   String?
+  method      String?   // HTTP method
+  endpoint    String?   // API endpoint called
+
+  // Result
+  status      String    // success, failure, error
+  statusCode  Int?      // HTTP status code
+  errorMessage String?
+
+  // Performance
+  duration    Int?      // Request duration in ms
+
+  createdAt   DateTime  @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([resource])
+  @@index([resourceId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// Activity logs for user-facing timeline
+model ActivityLog {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Activity details
+  type        String    // login, card_created, payment_made, kyc_submitted, etc.
+  title       String    // Human-readable title
+  description String?
+  icon        String?   // Icon identifier for UI
+
+  // Context
+  metadata    Json?
+
+  // User visibility
+  isRead      Boolean   @default(false)
+  isPinned    Boolean   @default(false)
+
+  createdAt   DateTime  @default(now())
+
+  @@index([userId])
+  @@index([type])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
+
+// Application error logs
+model ErrorLog {
+  id          String    @id @default(uuid())
+
+  // User context (if applicable)
+  userId      String?
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // Error details
+  level       String    // error, warning, critical
+  message     String
+  stack       String?   @db.Text
+  code        String?   // Error code
+
+  // Request context
+  endpoint    String?
+  method      String?
+  params      Json?
+  body        Json?
+  headers     Json?
+
+  // Environment
+  ipAddress   String?
+  userAgent   String?
+
+  // System info
+  nodeVersion String?
+  environment String?   // development, staging, production
+
+  // Resolution
+  isResolved  Boolean   @default(false)
+  resolvedAt  DateTime?
+  resolvedBy  String?
+  resolution  String?
+
+  // Metadata
+  metadata    Json?
+  occurrences Int       @default(1)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([level])
+  @@index([isResolved])
+  @@index([createdAt])
+  @@map("error_logs")
+}
+
+// API request logs for monitoring and analytics
+model RequestLog {
+  id          String    @id @default(uuid())
+
+  // Request details
+  method      String
+  endpoint    String
+  path        String
+  query       Json?
+  params      Json?
+  body        Json?
+  headers     Json?
+
+  // User context
+  userId      String?
+  apiKeyId    String?
+  sessionId   String?
+
+  // Response
+  statusCode  Int
+  responseTime Int      // in milliseconds
+  responseSize Int?     // in bytes
+
+  // Client info
+  ipAddress   String?
+  userAgent   String?
+
+  // GnosisPay integration
+  gnosisPayEndpoint String?  // If proxied to GnosisPay
+  gnosisPayStatus   Int?
+  gnosisPayResponseTime Int?
+
+  // Metadata
+  environment String?
+  version     String?
+
+  createdAt   DateTime  @default(now())
+
+  @@index([userId])
+  @@index([endpoint])
+  @@index([statusCode])
+  @@index([createdAt])
+  @@index([method, endpoint])
+  @@map("request_logs")
+}
+
+// System health metrics
+model SystemMetric {
+  id          String    @id @default(uuid())
+
+  // Metric details
+  type        String    // cpu_usage, memory_usage, db_connections, api_latency, etc.
+  value       Float
+  unit        String?   // percent, ms, count, bytes, etc.
+
+  // Tags for filtering
+  tags        Json?
+
+  // Thresholds
+  threshold   Float?
+  isAlert     Boolean   @default(false)
+
+  createdAt   DateTime  @default(now())
+
+  @@index([type])
+  @@index([isAlert])
+  @@index([createdAt])
+  @@map("system_metrics")
+}
+
+// ==================== NOTIFICATIONS ====================
+
+model Notification {
+  id          String    @id @default(uuid())
+  userId      String
+
+  type        String    // email, sms, push, in_app
+  channel     String    // The specific channel used
+
+  // Content
+  title       String
+  message     String    @db.Text
+  data        Json?     // Additional data
+
+  // Delivery
+  status      String    // pending, sent, delivered, failed, read
+  sentAt      DateTime?
+  deliveredAt DateTime?
+  readAt      DateTime?
+
+  // Retry logic
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(3)
+  lastError   String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+// ==================== CONFIGURATION ====================
+
+model AppConfig {
+  id          String    @id @default(uuid())
+
+  key         String    @unique
+  value       String    @db.Text
+  type        String    // string, number, boolean, json
+  description String?
+
+  isPublic    Boolean   @default(false) // Can be exposed to frontend
+  isEncrypted Boolean   @default(false)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([key])
+  @@map("app_config")
+}
