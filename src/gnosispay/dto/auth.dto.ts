@@ -1,5 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsEmail, IsOptional, IsNumber, Min, Max, MinLength, MaxLength } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsOptional,
+  IsNumber,
+  Min,
+  Max,
+  MinLength,
+  MaxLength,
+} from 'class-validator';
 
 export class GenerateNonceDto {
   // No body needed for GET request

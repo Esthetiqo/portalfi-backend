@@ -103,7 +103,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
         },
       });
       */
-      this.logger.warn('Error logging to database disabled - migrate to schema-new.prisma to enable');
+      this.logger.warn(
+        'Error logging to database disabled - migrate to schema-new.prisma to enable',
+      );
     } catch (error) {
       this.logger.error('Error logging to database:', error);
     }
@@ -113,7 +115,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (!body) return {};
     const sanitized = { ...body };
     // Remove sensitive fields
-    const sensitiveFields = ['password', 'token', 'apiKey', 'secret', 'privateKey'];
+    const sensitiveFields = [
+      'password',
+      'token',
+      'apiKey',
+      'secret',
+      'privateKey',
+    ];
     sensitiveFields.forEach((field) => {
       if (sanitized[field]) {
         sanitized[field] = '***REDACTED***';

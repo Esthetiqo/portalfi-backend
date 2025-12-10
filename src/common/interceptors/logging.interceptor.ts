@@ -107,7 +107,9 @@ export class LoggingInterceptor implements NestInterceptor {
 
       // For now, just log to console in development
       if (process.env.NODE_ENV === 'development') {
-        this.logger.debug('Request logged (DB logging disabled until schema migration)');
+        this.logger.debug(
+          'Request logged (DB logging disabled until schema migration)',
+        );
       }
     } catch (error) {
       this.logger.error('Failed to log request to database:', error);
@@ -163,7 +165,14 @@ export class LoggingInterceptor implements NestInterceptor {
   private sanitizeBody(body: any): any {
     if (!body) return {};
     const sanitized = { ...body };
-    const sensitiveFields = ['password', 'token', 'apiKey', 'secret', 'privateKey', 'signature'];
+    const sensitiveFields = [
+      'password',
+      'token',
+      'apiKey',
+      'secret',
+      'privateKey',
+      'signature',
+    ];
     sensitiveFields.forEach((field) => {
       if (sanitized[field]) {
         sanitized[field] = '***REDACTED***';
@@ -196,7 +205,8 @@ export class LoggingInterceptor implements NestInterceptor {
     ];
 
     return (
-      method !== 'GET' && importantPatterns.some((pattern) => url.includes(pattern))
+      method !== 'GET' &&
+      importantPatterns.some((pattern) => url.includes(pattern))
     );
   }
 

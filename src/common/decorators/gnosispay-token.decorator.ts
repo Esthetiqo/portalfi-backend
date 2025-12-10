@@ -1,4 +1,8 @@
-import { createParamDecorator, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import {
+  createParamDecorator,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 
 /**
  * Decorator to extract GnosisPay Bearer token from request headers
@@ -14,7 +18,9 @@ export const GnosisPayToken = createParamDecorator(
     }
 
     if (!authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException('Invalid authorization header format. Expected: Bearer <token>');
+      throw new UnauthorizedException(
+        'Invalid authorization header format. Expected: Bearer <token>',
+      );
     }
 
     const token = authHeader.substring(7); // Remove 'Bearer ' prefix

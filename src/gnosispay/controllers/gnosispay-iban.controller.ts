@@ -1,5 +1,19 @@
-import { Controller, Get, Post, Delete, Body, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Body,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { GnosisPayHttpService } from '../services/gnosispay-http.service';
 import { GnosisPayAuthGuard } from '../../common/guards/gnosispay-auth.guard';
 import { GnosisPayToken } from '../../common/decorators/gnosispay-token.decorator';
@@ -18,7 +32,10 @@ export class GnosisPayIbanController {
     description: 'IBAN availability checked successfully',
     schema: {
       properties: {
-        available: { type: 'boolean', description: 'Whether IBAN is available for this user' },
+        available: {
+          type: 'boolean',
+          description: 'Whether IBAN is available for this user',
+        },
         reason: { type: 'string', description: 'Reason if not available' },
         region: { type: 'string', description: 'Available region' },
       },
@@ -86,13 +103,20 @@ export class GnosisPayIbanController {
 
   @Get('oauth/redirect_url')
   @ApiOperation({ summary: 'Get Monerium OAuth redirect URL' })
-  @ApiQuery({ name: 'callbackUrl', description: 'Callback URL after OAuth flow', required: true })
+  @ApiQuery({
+    name: 'callbackUrl',
+    description: 'Callback URL after OAuth flow',
+    required: true,
+  })
   @ApiResponse({
     status: 200,
     description: 'OAuth redirect URL retrieved successfully',
     schema: {
       properties: {
-        redirectUrl: { type: 'string', description: 'Monerium OAuth URL to redirect user to' },
+        redirectUrl: {
+          type: 'string',
+          description: 'Monerium OAuth URL to redirect user to',
+        },
         state: { type: 'string', description: 'OAuth state parameter' },
       },
     },
@@ -117,18 +141,32 @@ export class GnosisPayIbanController {
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Profile creation failed or already exists' })
+  @ApiResponse({
+    status: 400,
+    description: 'Profile creation failed or already exists',
+  })
   async createMoneriumProfile(
     @GnosisPayToken() token: string,
     @Body() body: { callbackUrl: string },
   ): Promise<any> {
-    return await this.httpService.createMoneriumProfile(token, body.callbackUrl);
+    return await this.httpService.createMoneriumProfile(
+      token,
+      body.callbackUrl,
+    );
   }
 
   @Delete('reset')
-  @ApiOperation({ summary: 'Reset IBAN integration (remove Monerium connection)' })
-  @ApiResponse({ status: 200, description: 'IBAN integration reset successfully' })
-  @ApiResponse({ status: 400, description: 'Cannot reset - pending transactions or active balance' })
+  @ApiOperation({
+    summary: 'Reset IBAN integration (remove Monerium connection)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'IBAN integration reset successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot reset - pending transactions or active balance',
+  })
   async resetIban(@GnosisPayToken() token: string): Promise<void> {
     await this.httpService.resetIban(token);
   }
@@ -151,16 +189,27 @@ export class GnosisPayMoneriumController {
       properties: {
         integrationId: { type: 'string', description: 'Integration ID' },
         status: { type: 'string', enum: ['pending', 'active', 'failed'] },
-        accounts: { type: 'array', items: { type: 'object' }, description: 'Connected accounts' },
+        accounts: {
+          type: 'array',
+          items: { type: 'object' },
+          description: 'Connected accounts',
+        },
         createdAt: { type: 'string', format: 'date-time' },
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Invalid signature or accounts data' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid signature or accounts data',
+  })
   async createMoneriumIntegration(
     @GnosisPayToken() token: string,
     @Body() body: { signature: string; accounts: any[] },
   ): Promise<any> {
-    return await this.httpService.createMoneriumIntegration(token, body.signature, body.accounts);
+    return await this.httpService.createMoneriumIntegration(
+      token,
+      body.signature,
+      body.accounts,
+    );
   }
 }

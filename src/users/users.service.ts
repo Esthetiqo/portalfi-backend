@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, ConflictException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangeRoleDto } from './dto/change-role.dto';
@@ -43,7 +48,11 @@ export class UsersService {
     return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto, requestingUser: User): Promise<Omit<User, 'password'>> {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+    requestingUser: User,
+  ): Promise<Omit<User, 'password'>> {
     // Check if user exists
     const existingUser = await this.prisma.user.findUnique({ where: { id } });
     if (!existingUser) {
@@ -96,7 +105,10 @@ export class UsersService {
     await this.prisma.user.delete({ where: { id } });
   }
 
-  async changeRole(id: string, changeRoleDto: ChangeRoleDto): Promise<Omit<User, 'password'>> {
+  async changeRole(
+    id: string,
+    changeRoleDto: ChangeRoleDto,
+  ): Promise<Omit<User, 'password'>> {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);

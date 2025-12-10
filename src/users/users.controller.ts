@@ -1,5 +1,20 @@
-import { Controller, Get, Put, Delete, Patch, Body, Param, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Put,
+  Delete,
+  Patch,
+  Body,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+} from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangeRoleDto } from './dto/change-role.dto';
@@ -37,7 +52,10 @@ export class UsersController {
       },
     },
   })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   async findAll() {
     return this.usersService.findAll();
   }
@@ -61,7 +79,10 @@ export class UsersController {
     },
   })
   @ApiResponse({ status: 404, description: 'User not found' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   async findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
@@ -84,7 +105,10 @@ export class UsersController {
     },
   })
   @ApiResponse({ status: 404, description: 'User not found' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Can only update own profile' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Can only update own profile',
+  })
   @ApiResponse({ status: 409, description: 'Email already exists' })
   async update(
     @Param('id') id: string,
@@ -100,7 +124,10 @@ export class UsersController {
   @ApiOperation({ summary: 'Delete user (Admin only)' })
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   async remove(@Param('id') id: string) {
     await this.usersService.remove(id);
     return { message: 'User deleted successfully' };
@@ -125,8 +152,14 @@ export class UsersController {
     },
   })
   @ApiResponse({ status: 404, description: 'User not found' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
-  async changeRole(@Param('id') id: string, @Body() changeRoleDto: ChangeRoleDto) {
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
+  async changeRole(
+    @Param('id') id: string,
+    @Body() changeRoleDto: ChangeRoleDto,
+  ) {
     return this.usersService.changeRole(id, changeRoleDto);
   }
 }

@@ -82,12 +82,32 @@ export class AuditInterceptor implements NestInterceptor {
       { pattern: /\/auth\/logout$/i, type: 'logout' },
       { pattern: /\/auth\/signup$/i, type: 'signup' },
       { pattern: /\/cards\/virtual$/i, method: 'POST', type: 'card_created' },
-      { pattern: /\/cards\/[^/]+\/activate$/i, method: 'POST', type: 'card_activated' },
-      { pattern: /\/cards\/[^/]+\/freeze$/i, method: 'POST', type: 'card_frozen' },
-      { pattern: /\/cards\/[^/]+\/unfreeze$/i, method: 'POST', type: 'card_unfrozen' },
-      { pattern: /\/cards\/[^/]+\/report-lost$/i, method: 'POST', type: 'card_reported_lost' },
+      {
+        pattern: /\/cards\/[^/]+\/activate$/i,
+        method: 'POST',
+        type: 'card_activated',
+      },
+      {
+        pattern: /\/cards\/[^/]+\/freeze$/i,
+        method: 'POST',
+        type: 'card_frozen',
+      },
+      {
+        pattern: /\/cards\/[^/]+\/unfreeze$/i,
+        method: 'POST',
+        type: 'card_unfrozen',
+      },
+      {
+        pattern: /\/cards\/[^/]+\/report-lost$/i,
+        method: 'POST',
+        type: 'card_reported_lost',
+      },
       { pattern: /\/kyc\/answers$/i, method: 'POST', type: 'kyc_submitted' },
-      { pattern: /\/card-orders\/physical$/i, method: 'POST', type: 'physical_card_ordered' },
+      {
+        pattern: /\/card-orders\/physical$/i,
+        method: 'POST',
+        type: 'physical_card_ordered',
+      },
       { pattern: /\/webhooks$/i, method: 'POST', type: 'webhook_created' },
       { pattern: /\/user$/i, method: 'PATCH', type: 'profile_updated' },
     ];

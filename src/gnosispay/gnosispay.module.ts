@@ -7,13 +7,29 @@ import { GnosisPayAuthController } from './controllers/gnosispay-auth.controller
 import { GnosisPayKycController } from './controllers/gnosispay-kyc.controller';
 import { GnosisPayCardController } from './controllers/gnosispay-card.controller';
 import { GnosisPayUserController } from './controllers/gnosispay-user.controller';
-import { GnosisPayAccountController, GnosisPayAccountsController, GnosisPayEoaAccountsController } from './controllers/gnosispay-account.controller';
+import {
+  GnosisPayAccountController,
+  GnosisPayAccountsController,
+  GnosisPayEoaAccountsController,
+} from './controllers/gnosispay-account.controller';
 import { GnosisPayCardOrdersController } from './controllers/gnosispay-card-orders.controller';
-import { GnosisPaySafeController, GnosisPaySafeOwnersController, GnosisPayDelayRelayController, GnosisPayAccountSetupController } from './controllers/gnosispay-safe.controller';
-import { GnosisPayRewardsController, GnosisPayCashbackController, GnosisPayUserTermsController } from './controllers/gnosispay-rewards.controller';
+import {
+  GnosisPaySafeController,
+  GnosisPaySafeOwnersController,
+  GnosisPayDelayRelayController,
+  GnosisPayAccountSetupController,
+} from './controllers/gnosispay-safe.controller';
+import {
+  GnosisPayRewardsController,
+  GnosisPayCashbackController,
+  GnosisPayUserTermsController,
+} from './controllers/gnosispay-rewards.controller';
 import { GnosisPayTransactionsController } from './controllers/gnosispay-transactions.controller';
 import { GnosisPayWebhooksController } from './controllers/gnosispay-webhooks.controller';
-import { GnosisPayIbanController, GnosisPayMoneriumController } from './controllers/gnosispay-iban.controller';
+import {
+  GnosisPayIbanController,
+  GnosisPayMoneriumController,
+} from './controllers/gnosispay-iban.controller';
 import { GnosisPayVerificationController } from './controllers/gnosispay-verification.controller';
 import { GnosisPaySourceOfFundsController } from './controllers/gnosispay-source-of-funds.controller';
 

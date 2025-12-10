@@ -1,5 +1,20 @@
-import { Controller, Get, Post, Param, Query, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam, ApiQuery } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Query,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { GnosisPayHttpService } from '../services/gnosispay-http.service';
 import { GnosisPayAuthGuard } from '../../common/guards/gnosispay-auth.guard';
 import { GnosisPayToken } from '../../common/decorators/gnosispay-token.decorator';
@@ -15,13 +30,38 @@ export class GnosisPayTransactionsController {
 
   @Get()
   @ApiOperation({ summary: 'Get all transactions with optional filters' })
-  @ApiResponse({ status: 200, description: 'Transactions retrieved successfully' })
-  @ApiQuery({ name: 'cardId', required: false, description: 'Filter by card ID' })
-  @ApiQuery({ name: 'startDate', required: false, description: 'Start date (ISO 8601)' })
-  @ApiQuery({ name: 'endDate', required: false, description: 'End date (ISO 8601)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Transactions retrieved successfully',
+  })
+  @ApiQuery({
+    name: 'cardId',
+    required: false,
+    description: 'Filter by card ID',
+  })
+  @ApiQuery({
+    name: 'startDate',
+    required: false,
+    description: 'Start date (ISO 8601)',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    required: false,
+    description: 'End date (ISO 8601)',
+  })
   @ApiQuery({ name: 'type', required: false, description: 'Transaction type' })
-  @ApiQuery({ name: 'page', required: false, description: 'Page number', type: Number })
-  @ApiQuery({ name: 'limit', required: false, description: 'Items per page', type: Number })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    description: 'Page number',
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    description: 'Items per page',
+    type: Number,
+  })
   async getTransactions(
     @GnosisPayToken() token: string,
     @Query() query: GetTransactionsQueryDto,
@@ -32,7 +72,10 @@ export class GnosisPayTransactionsController {
   @Get(':transactionId')
   @ApiParam({ name: 'transactionId', description: 'Transaction ID' })
   @ApiOperation({ summary: 'Get transaction details by ID' })
-  @ApiResponse({ status: 200, description: 'Transaction retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Transaction retrieved successfully',
+  })
   @ApiResponse({ status: 404, description: 'Transaction not found' })
   async getTransaction(
     @GnosisPayToken() token: string,
@@ -63,10 +106,16 @@ export class GnosisPayTransactionsController {
   }
 
   @Post(':threadId/dispute')
-  @ApiParam({ name: 'threadId', description: 'Transaction thread ID to dispute' })
+  @ApiParam({
+    name: 'threadId',
+    description: 'Transaction thread ID to dispute',
+  })
   @ApiOperation({ summary: 'Dispute a transaction' })
   @ApiResponse({ status: 201, description: 'Dispute filed successfully' })
-  @ApiResponse({ status: 400, description: 'Transaction cannot be disputed or invalid reason' })
+  @ApiResponse({
+    status: 400,
+    description: 'Transaction cannot be disputed or invalid reason',
+  })
   @ApiResponse({ status: 404, description: 'Transaction not found' })
   async disputeTransaction(
     @GnosisPayToken() token: string,

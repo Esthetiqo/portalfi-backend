@@ -1,5 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsEmail, IsBoolean, IsNumber, Min, Max, IsEnum } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsEmail,
+  IsBoolean,
+  IsNumber,
+  Min,
+  Max,
+  IsEnum,
+} from 'class-validator';
 
 /**
  * Shared DTOs for GnosisPay API integration
@@ -68,7 +77,10 @@ export class UpdateUserDto {
   @IsString()
   state?: string;
 
-  @ApiProperty({ description: 'Country code (ISO 3166-1 alpha-2)', required: false })
+  @ApiProperty({
+    description: 'Country code (ISO 3166-1 alpha-2)',
+    required: false,
+  })
   @IsOptional()
   @IsString()
   country?: string;
@@ -170,7 +182,10 @@ export class CreateWebhookDto {
   @IsString()
   url: string;
 
-  @ApiProperty({ description: 'Array of event types to subscribe to', type: [String] })
+  @ApiProperty({
+    description: 'Array of event types to subscribe to',
+    type: [String],
+  })
   @IsString({ each: true })
   events: string[];
 
@@ -186,7 +201,11 @@ export class UpdateWebhookDto {
   @IsString()
   url?: string;
 
-  @ApiProperty({ description: 'Array of event types', required: false, type: [String] })
+  @ApiProperty({
+    description: 'Array of event types',
+    required: false,
+    type: [String],
+  })
   @IsOptional()
   @IsString({ each: true })
   events?: string[];
@@ -237,13 +256,24 @@ export class GetTransactionsQueryDto {
   @IsString()
   type?: string;
 
-  @ApiProperty({ description: 'Page number', required: false, minimum: 1, default: 1 })
+  @ApiProperty({
+    description: 'Page number',
+    required: false,
+    minimum: 1,
+    default: 1,
+  })
   @IsOptional()
   @IsNumber()
   @Min(1)
   page?: number = 1;
 
-  @ApiProperty({ description: 'Items per page', required: false, minimum: 1, maximum: 100, default: 20 })
+  @ApiProperty({
+    description: 'Items per page',
+    required: false,
+    minimum: 1,
+    maximum: 100,
+    default: 20,
+  })
   @IsOptional()
   @IsNumber()
   @Min(1)

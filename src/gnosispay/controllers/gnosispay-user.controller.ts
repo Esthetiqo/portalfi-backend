@@ -1,5 +1,10 @@
 import { Controller, Get, Patch, Post, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { GnosisPayHttpService } from '../services/gnosispay-http.service';
 import { GnosisPayAuthGuard } from '../../common/guards/gnosispay-auth.guard';
 import { GnosisPayToken } from '../../common/decorators/gnosispay-token.decorator';
@@ -16,7 +21,10 @@ export class GnosisPayUserController {
 
   @Get()
   @ApiOperation({ summary: 'Get current user information' })
-  @ApiResponse({ status: 200, description: 'User information retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'User information retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getUser(@GnosisPayToken() token: string): Promise<User> {
     return await this.httpService.getUser(token);

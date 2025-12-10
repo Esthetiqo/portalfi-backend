@@ -1,5 +1,22 @@
-import { Controller, Get, Put, Post, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam, ApiQuery } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Put,
+  Post,
+  Delete,
+  Body,
+  Param,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { GnosisPayHttpService } from '../services/gnosispay-http.service';
 import { GnosisPayAuthGuard } from '../../common/guards/gnosispay-auth.guard';
 import { GnosisPayToken } from '../../common/decorators/gnosispay-token.decorator';
@@ -19,27 +36,40 @@ export class GnosisPayAccountController {
     description: 'Balance information retrieved successfully',
     schema: {
       properties: {
-        total: { type: 'string', description: 'Total balance (spendable + pending)' },
+        total: {
+          type: 'string',
+          description: 'Total balance (spendable + pending)',
+        },
         spendable: { type: 'string', description: 'Amount that can be spent' },
         pending: { type: 'string', description: 'Amount being reviewed' },
       },
     },
   })
-  async getAccountBalance(@GnosisPayToken() token: string): Promise<AccountBalanceResponse> {
+  async getAccountBalance(
+    @GnosisPayToken() token: string,
+  ): Promise<AccountBalanceResponse> {
     return await this.httpService.getAccountBalance(token);
   }
 
   @Get('safe-config')
   @ApiOperation({ summary: 'Get Safe configuration details' })
-  @ApiResponse({ status: 200, description: 'Safe config retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Safe config retrieved successfully',
+  })
   async getSafeConfig(@GnosisPayToken() token: string): Promise<SafeConfig> {
     return await this.httpService.getSafeConfig(token);
   }
 
   @Get('delay-transactions')
   @ApiOperation({ summary: 'Get all delay transactions' })
-  @ApiResponse({ status: 200, description: 'Delay transactions retrieved successfully' })
-  async getDelayTransactions(@GnosisPayToken() token: string): Promise<DelayTransaction[]> {
+  @ApiResponse({
+    status: 200,
+    description: 'Delay transactions retrieved successfully',
+  })
+  async getDelayTransactions(
+    @GnosisPayToken() token: string,
+  ): Promise<DelayTransaction[]> {
     return await this.httpService.getDelayTransactions(token);
   }
 }
@@ -62,7 +92,10 @@ export class GnosisPayAccountsController {
       properties: {
         limit: { type: 'string', description: 'Current daily limit in wei' },
         spent: { type: 'string', description: 'Amount spent today in wei' },
-        remaining: { type: 'string', description: 'Remaining limit for today in wei' },
+        remaining: {
+          type: 'string',
+          description: 'Remaining limit for today in wei',
+        },
       },
     },
   })
@@ -78,13 +111,24 @@ export class GnosisPayAccountsController {
     @GnosisPayToken() token: string,
     @Body() body: { newLimit: string; signature: string },
   ): Promise<any> {
-    return await this.httpService.setDailyLimit(token, body.newLimit, body.signature);
+    return await this.httpService.setDailyLimit(
+      token,
+      body.newLimit,
+      body.signature,
+    );
   }
 
   @Get('daily-limit/transaction-data')
   @ApiOperation({ summary: 'Get EIP-712 typed data for daily limit signature' })
-  @ApiQuery({ name: 'newLimit', description: 'New daily limit in wei', required: true })
-  @ApiResponse({ status: 200, description: 'Transaction data retrieved successfully' })
+  @ApiQuery({
+    name: 'newLimit',
+    description: 'New daily limit in wei',
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Transaction data retrieved successfully',
+  })
   async getDailyLimitTransactionData(
     @GnosisPayToken() token: string,
     @Query('newLimit') newLimit: string,
@@ -95,11 +139,23 @@ export class GnosisPayAccountsController {
   // ===== WITHDRAW ENDPOINTS (HIGH PRIORITY) =====
   @Post('withdraw')
   @ApiOperation({ summary: 'Withdraw funds from Safe' })
-  @ApiResponse({ status: 200, description: 'Withdrawal initiated successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid withdrawal data or signature' })
+  @ApiResponse({
+    status: 200,
+    description: 'Withdrawal initiated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid withdrawal data or signature',
+  })
   async withdrawFromSafe(
     @GnosisPayToken() token: string,
-    @Body() body: { tokenAddress: string; to: string; amount: string; signature: string },
+    @Body()
+    body: {
+      tokenAddress: string;
+      to: string;
+      amount: string;
+      signature: string;
+    },
   ): Promise<any> {
     return await this.httpService.withdrawFromSafe(
       token,
@@ -112,17 +168,33 @@ export class GnosisPayAccountsController {
 
   @Get('withdraw/transaction-data')
   @ApiOperation({ summary: 'Get EIP-712 typed data for withdraw signature' })
-  @ApiQuery({ name: 'tokenAddress', description: 'Token contract address', required: true })
+  @ApiQuery({
+    name: 'tokenAddress',
+    description: 'Token contract address',
+    required: true,
+  })
   @ApiQuery({ name: 'to', description: 'Recipient address', required: true })
-  @ApiQuery({ name: 'amount', description: 'Amount to withdraw in wei', required: true })
-  @ApiResponse({ status: 200, description: 'Transaction data retrieved successfully' })
+  @ApiQuery({
+    name: 'amount',
+    description: 'Amount to withdraw in wei',
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Transaction data retrieved successfully',
+  })
   async getWithdrawTransactionData(
     @GnosisPayToken() token: string,
     @Query('tokenAddress') tokenAddress: string,
     @Query('to') to: string,
     @Query('amount') amount: string,
   ): Promise<any> {
-    return await this.httpService.getWithdrawTransactionData(token, tokenAddress, to, amount);
+    return await this.httpService.getWithdrawTransactionData(
+      token,
+      tokenAddress,
+      to,
+      amount,
+    );
   }
 
   // ===== LOW PRIORITY - DEPRECATED ENDPOINTS (Backward Compatibility) =====
@@ -131,7 +203,10 @@ export class GnosisPayAccountsController {
     summary: '⚠️ DEPRECATED: Get daily limit (use /daily-limit instead)',
     deprecated: true,
   })
-  @ApiResponse({ status: 200, description: 'Daily limit retrieved (deprecated endpoint)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Daily limit retrieved (deprecated endpoint)',
+  })
   async getOnchainDailyLimit(@GnosisPayToken() token: string): Promise<any> {
     // Maps to the new daily-limit endpoint
     return await this.httpService.getDailyLimit(token);
@@ -142,22 +217,37 @@ export class GnosisPayAccountsController {
     summary: '⚠️ DEPRECATED: Set daily limit (use /daily-limit instead)',
     deprecated: true,
   })
-  @ApiResponse({ status: 200, description: 'Daily limit updated (deprecated endpoint)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Daily limit updated (deprecated endpoint)',
+  })
   async setOnchainDailyLimit(
     @GnosisPayToken() token: string,
     @Body() body: { newLimit: string; signature: string },
   ): Promise<any> {
     // Maps to the new daily-limit endpoint
-    return await this.httpService.setDailyLimit(token, body.newLimit, body.signature);
+    return await this.httpService.setDailyLimit(
+      token,
+      body.newLimit,
+      body.signature,
+    );
   }
 
   @Get('onchain-daily-limit/transaction-data')
   @ApiOperation({
-    summary: '⚠️ DEPRECATED: Get transaction data for daily limit (use /daily-limit/transaction-data instead)',
+    summary:
+      '⚠️ DEPRECATED: Get transaction data for daily limit (use /daily-limit/transaction-data instead)',
     deprecated: true,
   })
-  @ApiQuery({ name: 'newLimit', description: 'New daily limit in wei', required: true })
-  @ApiResponse({ status: 200, description: 'Transaction data retrieved (deprecated endpoint)' })
+  @ApiQuery({
+    name: 'newLimit',
+    description: 'New daily limit in wei',
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Transaction data retrieved (deprecated endpoint)',
+  })
   async getOnchainDailyLimitTransactionData(
     @GnosisPayToken() token: string,
     @Query('newLimit') newLimit: string,
@@ -203,7 +293,12 @@ export class GnosisPayEoaAccountsController {
     @GnosisPayToken() token: string,
     @Body() body: { address: string; message: string; signature: string },
   ): Promise<any> {
-    return await this.httpService.addEoaAccount(token, body.address, body.message, body.signature);
+    return await this.httpService.addEoaAccount(
+      token,
+      body.address,
+      body.message,
+      body.signature,
+    );
   }
 
   @Delete(':id')
