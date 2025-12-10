@@ -59,7 +59,8 @@ describe('GnosisPayHttpService', () => {
         ],
       }).compile();
 
-      const testService = module.get<GnosisPayHttpService>(GnosisPayHttpService);
+      const testService =
+        module.get<GnosisPayHttpService>(GnosisPayHttpService);
       const result = await testService.generateNonce();
 
       expect(result).toBe(mockNonce);
@@ -91,8 +92,12 @@ describe('GnosisPayHttpService', () => {
         ],
       }).compile();
 
-      const testService = module.get<GnosisPayHttpService>(GnosisPayHttpService);
-      const result = await testService.verifyChallenge(mockMessage, mockSignature);
+      const testService =
+        module.get<GnosisPayHttpService>(GnosisPayHttpService);
+      const result = await testService.verifyChallenge(
+        mockMessage,
+        mockSignature,
+      );
 
       expect(result.token).toBe(mockToken);
       expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -127,7 +132,8 @@ describe('GnosisPayHttpService', () => {
         ],
       }).compile();
 
-      const testService = module.get<GnosisPayHttpService>(GnosisPayHttpService);
+      const testService =
+        module.get<GnosisPayHttpService>(GnosisPayHttpService);
       await testService.verifyChallenge('message', 'signature', ttl);
 
       expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -165,7 +171,8 @@ describe('GnosisPayHttpService', () => {
         ],
       }).compile();
 
-      const testService = module.get<GnosisPayHttpService>(GnosisPayHttpService);
+      const testService =
+        module.get<GnosisPayHttpService>(GnosisPayHttpService);
       const result = await testService.getUser(mockToken);
 
       expect(result).toEqual(mockUser);
@@ -205,7 +212,8 @@ describe('GnosisPayHttpService', () => {
         ],
       }).compile();
 
-      const testService = module.get<GnosisPayHttpService>(GnosisPayHttpService);
+      const testService =
+        module.get<GnosisPayHttpService>(GnosisPayHttpService);
       const result = await testService.getCards(mockToken);
 
       expect(result).toEqual(mockCards);
@@ -244,7 +252,8 @@ describe('GnosisPayHttpService', () => {
         ],
       }).compile();
 
-      const testService = module.get<GnosisPayHttpService>(GnosisPayHttpService);
+      const testService =
+        module.get<GnosisPayHttpService>(GnosisPayHttpService);
 
       await expect(testService.generateNonce()).rejects.toThrow();
     });

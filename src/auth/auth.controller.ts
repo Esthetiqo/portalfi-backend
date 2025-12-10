@@ -1,5 +1,10 @@
 import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -15,7 +20,11 @@ export class AuthController {
 
   @Post('register')
   @ApiOperation({ summary: 'Register a new user' })
-  @ApiResponse({ status: 201, description: 'User successfully registered', type: AuthEntity })
+  @ApiResponse({
+    status: 201,
+    description: 'User successfully registered',
+    type: AuthEntity,
+  })
   @ApiResponse({ status: 409, description: 'Email already exists' })
   async register(@Body() registerDto: RegisterDto): Promise<AuthEntity> {
     return this.authService.register(registerDto);
@@ -23,7 +32,11 @@ export class AuthController {
 
   @Post('login')
   @ApiOperation({ summary: 'Login user' })
-  @ApiResponse({ status: 200, description: 'User successfully logged in', type: AuthEntity })
+  @ApiResponse({
+    status: 200,
+    description: 'User successfully logged in',
+    type: AuthEntity,
+  })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   async login(@Body() loginDto: LoginDto): Promise<AuthEntity> {
     return this.authService.login(loginDto);
@@ -33,7 +46,10 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current user profile' })
-  @ApiResponse({ status: 200, description: 'User profile retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'User profile retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProfile(@GetUser() user: User) {
     return {

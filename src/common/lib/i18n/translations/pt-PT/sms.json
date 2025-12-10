@@ -1,0 +1,8 @@
+{
+  "otp": {
+    "generic": "Código de verificação do {{appName}}: {{code}}. Este código expira em {{minutes}} minutos. Não partilhe este código.",
+    "login": "Código de verificação de início de sessão do {{appName}}: {{code}}. Este código expira em {{minutes}} minutos. Não partilhe este código.",
+    "registration": "Bem-vindo ao {{appName}}! O seu código de verificação é: {{code}}. Este código expira em {{minutes}} minutos. Não partilhe este código.",
+    "password_reset": "Código de reposição de palavra-passe do {{appName}}: {{code}}. Este código expira em {{minutes}} minutos. Não partilhe este código."
+  }
+}

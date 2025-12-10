@@ -373,7 +373,11 @@ export interface MoneriumIntegrationResponse {
 }
 
 export interface TermsBody {
-  terms: 'general-tos' | 'card-monavate-tos' | 'cashback-tos' | 'privacy-policy';
+  terms:
+    | 'general-tos'
+    | 'card-monavate-tos'
+    | 'cashback-tos'
+    | 'privacy-policy';
   version: string;
 }
 

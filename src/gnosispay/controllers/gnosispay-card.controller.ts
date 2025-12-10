@@ -1,5 +1,12 @@
 import { Controller, Post, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { GnosisPayCardService } from '../services/gnosispay-card.service';
 import { GnosisPayHttpService } from '../services/gnosispay-http.service';
 import { GnosisPayAuthGuard } from '../../common/guards/gnosispay-auth.guard';
@@ -25,7 +32,10 @@ export class GnosisPayCardController {
 
   @Post('virtual')
   @ApiOperation({ summary: 'Create a new virtual card' })
-  @ApiResponse({ status: 201, description: 'Virtual card created successfully' })
+  @ApiResponse({
+    status: 201,
+    description: 'Virtual card created successfully',
+  })
   async createVirtualCard(@GnosisPayToken() token: string): Promise<Card> {
     return await this.gnosisPayCardService.createVirtualCard(token);
   }
@@ -33,7 +43,10 @@ export class GnosisPayCardController {
   @Get(':cardId')
   @ApiParam({ name: 'cardId', description: 'Card ID' })
   @ApiOperation({ summary: 'Get card details by ID' })
-  @ApiResponse({ status: 200, description: 'Card details retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Card details retrieved successfully',
+  })
   @ApiResponse({ status: 404, description: 'Card not found' })
   async getCardById(
     @GnosisPayToken() token: string,
@@ -46,7 +59,10 @@ export class GnosisPayCardController {
   @ApiParam({ name: 'cardId', description: 'Card ID to activate' })
   @ApiOperation({ summary: 'Activate a card' })
   @ApiResponse({ status: 200, description: 'Card activated successfully' })
-  @ApiResponse({ status: 400, description: 'Card already activated or blocked' })
+  @ApiResponse({
+    status: 400,
+    description: 'Card already activated or blocked',
+  })
   async activateCard(
     @GnosisPayToken() token: string,
     @Param('cardId') cardId: string,
@@ -79,7 +95,10 @@ export class GnosisPayCardController {
   @Post(':cardId/report-lost')
   @ApiParam({ name: 'cardId', description: 'Card ID to report as lost' })
   @ApiOperation({ summary: 'Report card as lost (permanent block)' })
-  @ApiResponse({ status: 200, description: 'Card reported as lost successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Card reported as lost successfully',
+  })
   async reportCardLost(
     @GnosisPayToken() token: string,
     @Param('cardId') cardId: string,
@@ -89,15 +108,60 @@ export class GnosisPayCardController {
 
   @Get('transactions')
   @ApiOperation({ summary: 'Get transactions for all cards (global view)' })
-  @ApiQuery({ name: 'cardTokens', required: false, description: 'Filter by specific card tokens (comma-separated)', type: String })
-  @ApiQuery({ name: 'limit', required: false, description: 'Number of transactions to return', type: Number })
-  @ApiQuery({ name: 'offset', required: false, description: 'Pagination offset', type: Number })
-  @ApiQuery({ name: 'before', required: false, description: 'Get transactions before this date (ISO 8601)', type: String })
-  @ApiQuery({ name: 'after', required: false, description: 'Get transactions after this date (ISO 8601)', type: String })
-  @ApiQuery({ name: 'billingCurrency', required: false, description: 'Filter by billing currency', type: String })
-  @ApiQuery({ name: 'transactionCurrency', required: false, description: 'Filter by transaction currency', type: String })
-  @ApiQuery({ name: 'mcc', required: false, description: 'Filter by merchant category code', type: String })
-  @ApiQuery({ name: 'transactionType', required: false, description: 'Filter by transaction type', type: String })
+  @ApiQuery({
+    name: 'cardTokens',
+    required: false,
+    description: 'Filter by specific card tokens (comma-separated)',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    description: 'Number of transactions to return',
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'offset',
+    required: false,
+    description: 'Pagination offset',
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'before',
+    required: false,
+    description: 'Get transactions before this date (ISO 8601)',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'after',
+    required: false,
+    description: 'Get transactions after this date (ISO 8601)',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'billingCurrency',
+    required: false,
+    description: 'Filter by billing currency',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'transactionCurrency',
+    required: false,
+    description: 'Filter by transaction currency',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'mcc',
+    required: false,
+    description: 'Filter by merchant category code',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'transactionType',
+    required: false,
+    description: 'Filter by transaction type',
+    type: String,
+  })
   @ApiResponse({
     status: 200,
     description: 'Transactions retrieved successfully',
@@ -145,7 +209,10 @@ export class GnosisPayCardController {
   @Get(':cardId/transactions')
   @ApiParam({ name: 'cardId', description: 'Card ID' })
   @ApiOperation({ summary: 'Get all transactions for a specific card' })
-  @ApiResponse({ status: 200, description: 'Transactions retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Transactions retrieved successfully',
+  })
   async getCardTransactions(
     @GnosisPayToken() token: string,
     @Param('cardId') cardId: string,
@@ -162,7 +229,10 @@ export class GnosisPayCardController {
     description: 'Card status retrieved successfully',
     schema: {
       properties: {
-        status: { type: 'string', enum: ['inactive', 'active', 'frozen', 'lost', 'stolen', 'void'] },
+        status: {
+          type: 'string',
+          enum: ['inactive', 'active', 'frozen', 'lost', 'stolen', 'void'],
+        },
         canActivate: { type: 'boolean' },
         canFreeze: { type: 'boolean' },
         canUnfreeze: { type: 'boolean' },
@@ -179,9 +249,17 @@ export class GnosisPayCardController {
 
   @Post(':cardId/stolen')
   @ApiParam({ name: 'cardId', description: 'Card ID to report as stolen' })
-  @ApiOperation({ summary: 'Report card as stolen (permanent block, replacement issued)' })
-  @ApiResponse({ status: 200, description: 'Card reported as stolen successfully' })
-  @ApiResponse({ status: 400, description: 'Card already blocked or invalid state' })
+  @ApiOperation({
+    summary: 'Report card as stolen (permanent block, replacement issued)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Card reported as stolen successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Card already blocked or invalid state',
+  })
   async reportCardStolen(
     @GnosisPayToken() token: string,
     @Param('cardId') cardId: string,
@@ -191,9 +269,14 @@ export class GnosisPayCardController {
 
   @Post(':cardId/void')
   @ApiParam({ name: 'cardId', description: 'Card ID to void' })
-  @ApiOperation({ summary: 'Void a virtual card (permanent, cannot be undone)' })
+  @ApiOperation({
+    summary: 'Void a virtual card (permanent, cannot be undone)',
+  })
   @ApiResponse({ status: 200, description: 'Card voided successfully' })
-  @ApiResponse({ status: 400, description: 'Cannot void physical cards or card already blocked' })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot void physical cards or card already blocked',
+  })
   async voidCard(
     @GnosisPayToken() token: string,
     @Param('cardId') cardId: string,

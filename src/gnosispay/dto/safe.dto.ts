@@ -15,7 +15,8 @@ export class CreateSafeDto {
 export class DeploySafeModulesDto {
   @ApiProperty({
     description: 'EIP-712 signature for the account setup transaction',
-    example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1b',
+    example:
+      '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1b',
   })
   @IsString()
   signature: string;

@@ -69,15 +69,31 @@ export class PaginatedResponseDto<T> {
  * Pagination query DTO
  */
 export class PaginationQueryDto {
-  @ApiProperty({ description: 'Page number', required: false, default: 1, minimum: 1 })
+  @ApiProperty({
+    description: 'Page number',
+    required: false,
+    default: 1,
+    minimum: 1,
+  })
   page?: number = 1;
 
-  @ApiProperty({ description: 'Items per page', required: false, default: 10, minimum: 1, maximum: 100 })
+  @ApiProperty({
+    description: 'Items per page',
+    required: false,
+    default: 10,
+    minimum: 1,
+    maximum: 100,
+  })
   limit?: number = 10;
 
   @ApiProperty({ description: 'Sort field', required: false })
   sortBy?: string;
 
-  @ApiProperty({ description: 'Sort order', required: false, enum: ['asc', 'desc'], default: 'desc' })
+  @ApiProperty({
+    description: 'Sort order',
+    required: false,
+    enum: ['asc', 'desc'],
+    default: 'desc',
+  })
   sortOrder?: 'asc' | 'desc' = 'desc';
 }

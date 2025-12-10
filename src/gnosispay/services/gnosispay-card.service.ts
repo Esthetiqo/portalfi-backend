@@ -52,7 +52,9 @@ export class GnosisPayCardService {
    * Get all transactions for a specific card
    */
   async getCardTransactions(token: string, cardId: string): Promise<Event[]> {
-    return await this.gnosisPayHttp.getCardTransactions(token, { cardTokens: [cardId] });
+    return await this.gnosisPayHttp.getCardTransactions(token, {
+      cardTokens: [cardId],
+    });
   }
 
   /**

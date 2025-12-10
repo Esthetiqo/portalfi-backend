@@ -24,7 +24,9 @@ export class GnosisPayHttpService {
   private readonly baseURL: string;
 
   constructor(private configService: ConfigService) {
-    this.baseURL = this.configService.get<string>('GNOSISPAY_API_URL') || 'https://api.gnosispay.com';
+    this.baseURL =
+      this.configService.get<string>('GNOSISPAY_API_URL') ||
+      'https://api.gnosispay.com';
 
     this.client = axios.create({
       baseURL: this.baseURL,
@@ -59,12 +61,19 @@ export class GnosisPayHttpService {
     return response.data;
   }
 
-  async verifyChallenge(message: string, signature: string, ttlInSeconds?: number): Promise<ChallengeResponse> {
-    const response = await this.client.post<ChallengeResponse>('/api/v1/auth/challenge', {
-      message,
-      signature,
-      ttlInSeconds,
-    });
+  async verifyChallenge(
+    message: string,
+    signature: string,
+    ttlInSeconds?: number,
+  ): Promise<ChallengeResponse> {
+    const response = await this.client.post<ChallengeResponse>(
+      '/api/v1/auth/challenge',
+      {
+        message,
+        signature,
+        ttlInSeconds,
+      },
+    );
     return response.data;
   }
 
@@ -97,12 +106,19 @@ export class GnosisPayHttpService {
   // ==================== User Management ====================
 
   async getUser(token: string): Promise<User> {
-    const response = await this.client.get<User>('/api/v1/user', this.getAuthHeaders(token));
+    const response = await this.client.get<User>(
+      '/api/v1/user',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async updateUser(token: string, userData: Partial<User>): Promise<User> {
-    const response = await this.client.patch<User>('/api/v1/user', userData, this.getAuthHeaders(token));
+    const response = await this.client.patch<User>(
+      '/api/v1/user',
+      userData,
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
@@ -117,16 +133,26 @@ export class GnosisPayHttpService {
   }
 
   async getSafeConfig(token: string): Promise<SafeConfig> {
-    const response = await this.client.get<SafeConfig>('/api/v1/safe/config', this.getAuthHeaders(token));
+    const response = await this.client.get<SafeConfig>(
+      '/api/v1/safe/config',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async getDailyLimit(token: string): Promise<any> {
-    const response = await this.client.get('/api/v1/accounts/daily-limit', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/accounts/daily-limit',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
-  async setDailyLimit(token: string, newLimit: string, signature: string): Promise<any> {
+  async setDailyLimit(
+    token: string,
+    newLimit: string,
+    signature: string,
+  ): Promise<any> {
     const response = await this.client.put(
       '/api/v1/accounts/daily-limit',
       { newLimit, signature },
@@ -135,15 +161,27 @@ export class GnosisPayHttpService {
     return response.data;
   }
 
-  async getDailyLimitTransactionData(token: string, newLimit: string): Promise<any> {
-    const response = await this.client.get('/api/v1/accounts/daily-limit/transaction-data', {
-      ...this.getAuthHeaders(token),
-      params: { newLimit },
-    });
+  async getDailyLimitTransactionData(
+    token: string,
+    newLimit: string,
+  ): Promise<any> {
+    const response = await this.client.get(
+      '/api/v1/accounts/daily-limit/transaction-data',
+      {
+        ...this.getAuthHeaders(token),
+        params: { newLimit },
+      },
+    );
     return response.data;
   }
 
-  async withdrawFromSafe(token: string, tokenAddress: string, to: string, amount: string, signature: string): Promise<any> {
+  async withdrawFromSafe(
+    token: string,
+    tokenAddress: string,
+    to: string,
+    amount: string,
+    signature: string,
+  ): Promise<any> {
     const response = await this.client.post(
       '/api/v1/accounts/withdraw',
       { tokenAddress, to, amount, signature },
@@ -152,21 +190,37 @@ export class GnosisPayHttpService {
     return response.data;
   }
 
-  async getWithdrawTransactionData(token: string, tokenAddress: string, to: string, amount: string): Promise<any> {
-    const response = await this.client.get('/api/v1/accounts/withdraw/transaction-data', {
-      ...this.getAuthHeaders(token),
-      params: { tokenAddress, to, amount },
-    });
+  async getWithdrawTransactionData(
+    token: string,
+    tokenAddress: string,
+    to: string,
+    amount: string,
+  ): Promise<any> {
+    const response = await this.client.get(
+      '/api/v1/accounts/withdraw/transaction-data',
+      {
+        ...this.getAuthHeaders(token),
+        params: { tokenAddress, to, amount },
+      },
+    );
     return response.data;
   }
 
   // EOA Accounts
   async getEoaAccounts(token: string): Promise<any[]> {
-    const response = await this.client.get('/api/v1/eoa-accounts', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/eoa-accounts',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
-  async addEoaAccount(token: string, address: string, message: string, signature: string): Promise<any> {
+  async addEoaAccount(
+    token: string,
+    address: string,
+    message: string,
+    signature: string,
+  ): Promise<any> {
     const response = await this.client.post(
       '/api/v1/eoa-accounts',
       { address, message, signature },
@@ -176,12 +230,18 @@ export class GnosisPayHttpService {
   }
 
   async removeEoaAccount(token: string, id: string): Promise<void> {
-    await this.client.delete(`/api/v1/eoa-accounts/${id}`, this.getAuthHeaders(token));
+    await this.client.delete(
+      `/api/v1/eoa-accounts/${id}`,
+      this.getAuthHeaders(token),
+    );
   }
 
   // ==================== Safe Management ====================
 
-  async createSafe(token: string, chainId: number): Promise<CreateSafeResponse> {
+  async createSafe(
+    token: string,
+    chainId: number,
+  ): Promise<CreateSafeResponse> {
     const response = await this.client.post<CreateSafeResponse>(
       '/api/v1/account',
       { chainId: chainId.toString() },
@@ -198,7 +258,10 @@ export class GnosisPayHttpService {
     return response.data;
   }
 
-  async deploySafeModules(token: string, signature: string): Promise<DeploySafeModulesResponse> {
+  async deploySafeModules(
+    token: string,
+    signature: string,
+  ): Promise<DeploySafeModulesResponse> {
     const response = await this.client.patch<DeploySafeModulesResponse>(
       '/api/v1/account/deploy-safe-modules',
       { signature },
@@ -216,12 +279,19 @@ export class GnosisPayHttpService {
   }
 
   async deploySafe(token: string): Promise<any> {
-    const response = await this.client.post('/api/v1/safe/deploy', {}, this.getAuthHeaders(token));
+    const response = await this.client.post(
+      '/api/v1/safe/deploy',
+      {},
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async getSafeDeploymentStatus(token: string): Promise<any> {
-    const response = await this.client.get('/api/v1/safe/deploy', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/safe/deploy',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
@@ -231,11 +301,18 @@ export class GnosisPayHttpService {
 
   // Safe Owners
   async getSafeOwners(token: string): Promise<any[]> {
-    const response = await this.client.get('/api/v1/owners', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/owners',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
-  async addSafeOwner(token: string, newOwner: string, signature: string): Promise<any> {
+  async addSafeOwner(
+    token: string,
+    newOwner: string,
+    signature: string,
+  ): Promise<any> {
     const response = await this.client.post(
       '/api/v1/owners',
       { newOwner, signature },
@@ -244,7 +321,11 @@ export class GnosisPayHttpService {
     return response.data;
   }
 
-  async removeSafeOwner(token: string, ownerToRemove: string, signature: string): Promise<any> {
+  async removeSafeOwner(
+    token: string,
+    ownerToRemove: string,
+    signature: string,
+  ): Promise<any> {
     const response = await this.client.delete('/api/v1/owners', {
       ...this.getAuthHeaders(token),
       data: { ownerToRemove, signature },
@@ -252,65 +333,114 @@ export class GnosisPayHttpService {
     return response.data;
   }
 
-  async getAddOwnerTransactionData(token: string, newOwner: string): Promise<any> {
-    const response = await this.client.get('/api/v1/owners/add/transaction-data', {
-      ...this.getAuthHeaders(token),
-      params: { newOwner },
-    });
+  async getAddOwnerTransactionData(
+    token: string,
+    newOwner: string,
+  ): Promise<any> {
+    const response = await this.client.get(
+      '/api/v1/owners/add/transaction-data',
+      {
+        ...this.getAuthHeaders(token),
+        params: { newOwner },
+      },
+    );
     return response.data;
   }
 
-  async getRemoveOwnerTransactionData(token: string, ownerToRemove: string): Promise<any> {
-    const response = await this.client.get('/api/v1/owners/remove/transaction-data', {
-      ...this.getAuthHeaders(token),
-      params: { ownerToRemove },
-    });
+  async getRemoveOwnerTransactionData(
+    token: string,
+    ownerToRemove: string,
+  ): Promise<any> {
+    const response = await this.client.get(
+      '/api/v1/owners/remove/transaction-data',
+      {
+        ...this.getAuthHeaders(token),
+        params: { ownerToRemove },
+      },
+    );
     return response.data;
   }
 
   // ==================== Card Management ====================
 
   async getCards(token: string): Promise<Card[]> {
-    const response = await this.client.get<Card[]>('/api/v1/cards', this.getAuthHeaders(token));
+    const response = await this.client.get<Card[]>(
+      '/api/v1/cards',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async getCardById(token: string, cardId: string): Promise<Card> {
-    const response = await this.client.get<Card>(`/api/v1/cards/${cardId}`, this.getAuthHeaders(token));
+    const response = await this.client.get<Card>(
+      `/api/v1/cards/${cardId}`,
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async createVirtualCard(token: string): Promise<Card> {
-    const response = await this.client.post<Card>('/api/v1/cards/virtual', {}, this.getAuthHeaders(token));
+    const response = await this.client.post<Card>(
+      '/api/v1/cards/virtual',
+      {},
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async activateCard(token: string, cardId: string): Promise<void> {
-    await this.client.post(`/api/v1/cards/${cardId}/activate`, {}, this.getAuthHeaders(token));
+    await this.client.post(
+      `/api/v1/cards/${cardId}/activate`,
+      {},
+      this.getAuthHeaders(token),
+    );
   }
 
   async freezeCard(token: string, cardId: string): Promise<void> {
-    await this.client.post(`/api/v1/cards/${cardId}/freeze`, {}, this.getAuthHeaders(token));
+    await this.client.post(
+      `/api/v1/cards/${cardId}/freeze`,
+      {},
+      this.getAuthHeaders(token),
+    );
   }
 
   async unfreezeCard(token: string, cardId: string): Promise<void> {
-    await this.client.post(`/api/v1/cards/${cardId}/unfreeze`, {}, this.getAuthHeaders(token));
+    await this.client.post(
+      `/api/v1/cards/${cardId}/unfreeze`,
+      {},
+      this.getAuthHeaders(token),
+    );
   }
 
   async reportCardLost(token: string, cardId: string): Promise<void> {
-    await this.client.post(`/api/v1/cards/${cardId}/lost`, {}, this.getAuthHeaders(token));
+    await this.client.post(
+      `/api/v1/cards/${cardId}/lost`,
+      {},
+      this.getAuthHeaders(token),
+    );
   }
 
   async reportCardStolen(token: string, cardId: string): Promise<void> {
-    await this.client.post(`/api/v1/cards/${cardId}/stolen`, {}, this.getAuthHeaders(token));
+    await this.client.post(
+      `/api/v1/cards/${cardId}/stolen`,
+      {},
+      this.getAuthHeaders(token),
+    );
   }
 
   async voidCard(token: string, cardId: string): Promise<void> {
-    await this.client.post(`/api/v1/cards/${cardId}/void`, {}, this.getAuthHeaders(token));
+    await this.client.post(
+      `/api/v1/cards/${cardId}/void`,
+      {},
+      this.getAuthHeaders(token),
+    );
   }
 
   async getCardStatus(token: string, cardId: string): Promise<any> {
-    const response = await this.client.get(`/api/v1/cards/${cardId}/status`, this.getAuthHeaders(token));
+    const response = await this.client.get(
+      `/api/v1/cards/${cardId}/status`,
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
@@ -338,19 +468,35 @@ export class GnosisPayHttpService {
   // ==================== KYC ====================
 
   async getKycQuestions(token: string): Promise<KycQuestion[]> {
-    const response = await this.client.get<KycQuestion[]>('/api/v1/kyc/questions', this.getAuthHeaders(token));
+    const response = await this.client.get<KycQuestion[]>(
+      '/api/v1/kyc/questions',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
-  async submitKycAnswers(token: string, answers: Array<{ question: string; answer: string }>): Promise<void> {
-    await this.client.post('/api/v1/kyc/answers', { answers }, this.getAuthHeaders(token));
+  async submitKycAnswers(
+    token: string,
+    answers: Array<{ question: string; answer: string }>,
+  ): Promise<void> {
+    await this.client.post(
+      '/api/v1/kyc/answers',
+      { answers },
+      this.getAuthHeaders(token),
+    );
   }
 
-  async getKycAccessToken(token: string, lang?: string): Promise<{ token: string }> {
-    const response = await this.client.get<{ token: string }>('/api/v1/kyc/integration/sdk', {
-      ...this.getAuthHeaders(token),
-      params: { lang },
-    });
+  async getKycAccessToken(
+    token: string,
+    lang?: string,
+  ): Promise<{ token: string }> {
+    const response = await this.client.get<{ token: string }>(
+      '/api/v1/kyc/integration/sdk',
+      {
+        ...this.getAuthHeaders(token),
+        params: { lang },
+      },
+    );
     return response.data;
   }
 
@@ -362,7 +508,10 @@ export class GnosisPayHttpService {
     return response.data;
   }
 
-  async importPartnerApplicant(token: string, applicantId: string): Promise<any> {
+  async importPartnerApplicant(
+    token: string,
+    applicantId: string,
+  ): Promise<any> {
     const response = await this.client.post(
       '/api/v1/kyc/import-partner-applicant',
       { applicantId },
@@ -380,20 +529,39 @@ export class GnosisPayHttpService {
   }
 
   async submitSourceOfFunds(token: string, answers: any): Promise<void> {
-    await this.client.post('/api/v1/source-of-funds', answers, this.getAuthHeaders(token));
+    await this.client.post(
+      '/api/v1/source-of-funds',
+      answers,
+      this.getAuthHeaders(token),
+    );
   }
 
-  async requestVerificationOtp(token: string, phoneNumber: string): Promise<void> {
-    await this.client.post('/api/v1/verification', { phoneNumber }, this.getAuthHeaders(token));
+  async requestVerificationOtp(
+    token: string,
+    phoneNumber: string,
+  ): Promise<void> {
+    await this.client.post(
+      '/api/v1/verification',
+      { phoneNumber },
+      this.getAuthHeaders(token),
+    );
   }
 
   async verifyPhoneWithOtp(token: string, code: string): Promise<void> {
-    await this.client.post('/api/v1/verification/check', { code }, this.getAuthHeaders(token));
+    await this.client.post(
+      '/api/v1/verification/check',
+      { code },
+      this.getAuthHeaders(token),
+    );
   }
 
   // ==================== IBAN / Monerium ====================
 
-  async createMoneriumIntegration(token: string, signature: string, accounts: any[]): Promise<MoneriumIntegrationResponse> {
+  async createMoneriumIntegration(
+    token: string,
+    signature: string,
+    accounts: any[],
+  ): Promise<MoneriumIntegrationResponse> {
     const response = await this.client.post<MoneriumIntegrationResponse>(
       '/api/v1/integrations/monerium',
       { signature, accounts },
@@ -403,26 +571,41 @@ export class GnosisPayHttpService {
   }
 
   async getIbanAvailability(token: string): Promise<any> {
-    const response = await this.client.get('/api/v1/ibans/available', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/ibans/available',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async getIbanDetails(token: string): Promise<any> {
-    const response = await this.client.get('/api/v1/ibans/details', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/ibans/details',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async getIbanOrders(token: string): Promise<any[]> {
-    const response = await this.client.get('/api/v1/ibans/orders', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/ibans/orders',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async getIbanSigningMessage(token: string): Promise<any> {
-    const response = await this.client.get('/api/v1/ibans/signing-message', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/ibans/signing-message',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
-  async getIbanOauthRedirectUrl(token: string, callbackUrl: string): Promise<any> {
+  async getIbanOauthRedirectUrl(
+    token: string,
+    callbackUrl: string,
+  ): Promise<any> {
     const response = await this.client.get('/api/v1/ibans/oauth/redirect_url', {
       ...this.getAuthHeaders(token),
       params: { callbackUrl },
@@ -430,7 +613,10 @@ export class GnosisPayHttpService {
     return response.data;
   }
 
-  async createMoneriumProfile(token: string, callbackUrl: string): Promise<any> {
+  async createMoneriumProfile(
+    token: string,
+    callbackUrl: string,
+  ): Promise<any> {
     const response = await this.client.post(
       '/api/v1/ibans/monerium-profile',
       { callbackUrl },
@@ -446,39 +632,69 @@ export class GnosisPayHttpService {
   // ==================== Phone Validation ====================
 
   async sendPhoneVerification(token: string, phone: string): Promise<void> {
-    await this.client.post('/api/v1/user/phone/send-otp', { phone }, this.getAuthHeaders(token));
+    await this.client.post(
+      '/api/v1/user/phone/send-otp',
+      { phone },
+      this.getAuthHeaders(token),
+    );
   }
 
   async verifyPhoneOtp(token: string, otp: string): Promise<void> {
-    await this.client.post('/api/v1/user/phone/verify-otp', { otp }, this.getAuthHeaders(token));
+    await this.client.post(
+      '/api/v1/user/phone/verify-otp',
+      { otp },
+      this.getAuthHeaders(token),
+    );
   }
 
   // ==================== Physical Card Orders ====================
 
   async createPhysicalCardOrder(token: string, orderData: any): Promise<any> {
-    const response = await this.client.post('/api/v1/order/create', orderData, this.getAuthHeaders(token));
+    const response = await this.client.post(
+      '/api/v1/order/create',
+      orderData,
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async getCardOrder(token: string, orderId: string): Promise<any> {
-    const response = await this.client.get(`/api/v1/order/${orderId}`, this.getAuthHeaders(token));
+    const response = await this.client.get(
+      `/api/v1/order/${orderId}`,
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async cancelCardOrder(token: string, orderId: string): Promise<void> {
-    await this.client.post(`/api/v1/order/${orderId}/cancel`, {}, this.getAuthHeaders(token));
+    await this.client.post(
+      `/api/v1/order/${orderId}/cancel`,
+      {},
+      this.getAuthHeaders(token),
+    );
   }
 
   async confirmCardOrderPayment(token: string, orderId: string): Promise<void> {
-    await this.client.put(`/api/v1/order/${orderId}/confirm-payment`, {}, this.getAuthHeaders(token));
+    await this.client.put(
+      `/api/v1/order/${orderId}/confirm-payment`,
+      {},
+      this.getAuthHeaders(token),
+    );
   }
 
   async getCardOrders(token: string): Promise<any[]> {
-    const response = await this.client.get('/api/v1/order/', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/order/',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
-  async attachCouponToOrder(token: string, orderId: string, couponCode: string): Promise<any> {
+  async attachCouponToOrder(
+    token: string,
+    orderId: string,
+    couponCode: string,
+  ): Promise<any> {
     const response = await this.client.post(
       `/api/v1/order/${orderId}/attach-coupon`,
       { couponCode },
@@ -487,7 +703,11 @@ export class GnosisPayHttpService {
     return response.data;
   }
 
-  async attachTransactionToOrder(token: string, orderId: string, transactionHash: string): Promise<any> {
+  async attachTransactionToOrder(
+    token: string,
+    orderId: string,
+    transactionHash: string,
+  ): Promise<any> {
     const response = await this.client.put(
       `/api/v1/order/${orderId}/attach-transaction`,
       { transactionHash },
@@ -497,39 +717,67 @@ export class GnosisPayHttpService {
   }
 
   async createPhysicalCard(token: string, orderId: string): Promise<any> {
-    const response = await this.client.post(`/api/v1/order/${orderId}/create-card`, {}, this.getAuthHeaders(token));
+    const response = await this.client.post(
+      `/api/v1/order/${orderId}/create-card`,
+      {},
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   // ==================== Safe Management (Modern) ====================
 
   async setSafeCurrency(token: string, currency: string): Promise<void> {
-    await this.client.post('/api/v1/safe/set-currency', { currency }, this.getAuthHeaders(token));
+    await this.client.post(
+      '/api/v1/safe/set-currency',
+      { currency },
+      this.getAuthHeaders(token),
+    );
   }
 
   async getSupportedCurrencies(token: string): Promise<any[]> {
-    const response = await this.client.get('/api/v1/safe/supported-currencies', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/safe/supported-currencies',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
-  async createSafeTransaction(token: string, transactionData: any): Promise<any> {
-    const response = await this.client.post('/api/v1/safe/transactions', transactionData, this.getAuthHeaders(token));
+  async createSafeTransaction(
+    token: string,
+    transactionData: any,
+  ): Promise<any> {
+    const response = await this.client.post(
+      '/api/v1/safe/transactions',
+      transactionData,
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   // ==================== Rewards / Cashback ====================
 
   async getRewards(token: string): Promise<any> {
-    const response = await this.client.get('/api/v1/rewards', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/rewards',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async acceptRewardsTerms(token: string, version: string): Promise<void> {
-    await this.client.post('/api/v1/user/terms', { type: 'rewards', version }, this.getAuthHeaders(token));
+    await this.client.post(
+      '/api/v1/user/terms',
+      { type: 'rewards', version },
+      this.getAuthHeaders(token),
+    );
   }
 
   async getCashback(token: string): Promise<any> {
-    const response = await this.client.get('/api/v1/cashback', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/cashback',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
@@ -544,16 +792,27 @@ export class GnosisPayHttpService {
   }
 
   async getTransaction(token: string, transactionId: string): Promise<any> {
-    const response = await this.client.get(`/api/v1/transactions/${transactionId}`, this.getAuthHeaders(token));
+    const response = await this.client.get(
+      `/api/v1/transactions/${transactionId}`,
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async getDisputeReasons(token: string): Promise<any[]> {
-    const response = await this.client.get('/api/v1/transactions/dispute', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/transactions/dispute',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
-  async disputeTransaction(token: string, threadId: string, reason: string, description?: string): Promise<any> {
+  async disputeTransaction(
+    token: string,
+    threadId: string,
+    reason: string,
+    description?: string,
+  ): Promise<any> {
     const response = await this.client.post(
       `/api/v1/transactions/${threadId}/dispute`,
       { reason, description },
@@ -565,35 +824,65 @@ export class GnosisPayHttpService {
   // ==================== Webhooks ====================
 
   async getWebhooks(token: string): Promise<any[]> {
-    const response = await this.client.get('/api/v1/webhooks', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/webhooks',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async createWebhook(token: string, webhookData: any): Promise<any> {
-    const response = await this.client.post('/api/v1/webhooks', webhookData, this.getAuthHeaders(token));
+    const response = await this.client.post(
+      '/api/v1/webhooks',
+      webhookData,
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async getWebhook(token: string, webhookId: string): Promise<any> {
-    const response = await this.client.get(`/api/v1/webhooks/${webhookId}`, this.getAuthHeaders(token));
+    const response = await this.client.get(
+      `/api/v1/webhooks/${webhookId}`,
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
-  async updateWebhook(token: string, webhookId: string, webhookData: any): Promise<any> {
-    const response = await this.client.patch(`/api/v1/webhooks/${webhookId}`, webhookData, this.getAuthHeaders(token));
+  async updateWebhook(
+    token: string,
+    webhookId: string,
+    webhookData: any,
+  ): Promise<any> {
+    const response = await this.client.patch(
+      `/api/v1/webhooks/${webhookId}`,
+      webhookData,
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
   async deleteWebhook(token: string, webhookId: string): Promise<void> {
-    await this.client.delete(`/api/v1/webhooks/${webhookId}`, this.getAuthHeaders(token));
+    await this.client.delete(
+      `/api/v1/webhooks/${webhookId}`,
+      this.getAuthHeaders(token),
+    );
   }
 
   async getWebhookMessage(token: string, partnerId: string): Promise<any> {
-    const response = await this.client.get(`/api/v1/webhooks/message/${partnerId}`, this.getAuthHeaders(token));
+    const response = await this.client.get(
+      `/api/v1/webhooks/message/${partnerId}`,
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
-  async subscribeWebhook(token: string, partnerId: string, url: string, signature: string, events: string[]): Promise<any> {
+  async subscribeWebhook(
+    token: string,
+    partnerId: string,
+    url: string,
+    signature: string,
+    events: string[],
+  ): Promise<any> {
     const response = await this.client.post(
       `/api/v1/webhooks/subscribe/${partnerId}`,
       { url, signature, events },
@@ -605,11 +894,22 @@ export class GnosisPayHttpService {
   // ==================== User Terms & Conditions ====================
 
   async getUserTermsStatus(token: string): Promise<any> {
-    const response = await this.client.get('/api/v1/user/terms', this.getAuthHeaders(token));
+    const response = await this.client.get(
+      '/api/v1/user/terms',
+      this.getAuthHeaders(token),
+    );
     return response.data;
   }
 
-  async acceptUserTerms(token: string, type: string, version: string): Promise<void> {
-    await this.client.post('/api/v1/user/terms', { type, version }, this.getAuthHeaders(token));
+  async acceptUserTerms(
+    token: string,
+    type: string,
+    version: string,
+  ): Promise<void> {
+    await this.client.post(
+      '/api/v1/user/terms',
+      { type, version },
+      this.getAuthHeaders(token),
+    );
   }
 }

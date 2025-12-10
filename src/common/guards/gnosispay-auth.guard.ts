@@ -19,7 +19,10 @@ export class GnosisPayAuthGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     // Check if route is marked as public
-    const isPublic = this.reflector.get<boolean>('isPublic', context.getHandler());
+    const isPublic = this.reflector.get<boolean>(
+      'isPublic',
+      context.getHandler(),
+    );
     if (isPublic) {
       return true;
     }
@@ -34,7 +37,9 @@ export class GnosisPayAuthGuard implements CanActivate {
 
     if (!authHeader.startsWith('Bearer ')) {
       this.logger.warn('Invalid authorization header format');
-      throw new UnauthorizedException('Invalid authorization header format. Expected: Bearer <token>');
+      throw new UnauthorizedException(
+        'Invalid authorization header format. Expected: Bearer <token>',
+      );
     }
 
     const token = authHeader.substring(7);
