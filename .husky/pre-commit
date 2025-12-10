@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo "Running type check and build..."
+npm run build || {
+  echo "Build failed. Please fix TypeScript errors before committing."
+  exit 1
+}
+
+echo "Running lint-staged..."
+npx lint-staged || {
+  echo "Lint-staged failed. Please fix linting errors before committing."
+  exit 1
+}
+
+echo "Pre-commit checks passed!"
