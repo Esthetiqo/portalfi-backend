@@ -111,12 +111,24 @@ All errors return consistent JSON format:
       'bearerAuth',
     )
     .addTag('GnosisPay - Authentication', 'SIWE authentication and user signup')
-    .addTag('GnosisPay - User Management', 'User profile and phone verification')
-    .addTag('GnosisPay - Account Management', 'Account balances and Safe configuration')
+    .addTag(
+      'GnosisPay - User Management',
+      'User profile and phone verification',
+    )
+    .addTag(
+      'GnosisPay - Account Management',
+      'Account balances and Safe configuration',
+    )
     .addTag('GnosisPay - Cards', 'Virtual and physical card management')
     .addTag('GnosisPay - KYC', 'Know Your Customer verification process')
-    .addTag('GnosisPay - Physical Card Orders', 'Order and manage physical cards')
-    .addTag('GnosisPay - Safe Management', 'Safe wallet and currency management')
+    .addTag(
+      'GnosisPay - Physical Card Orders',
+      'Order and manage physical cards',
+    )
+    .addTag(
+      'GnosisPay - Safe Management',
+      'Safe wallet and currency management',
+    )
     .addTag('GnosisPay - Rewards & Cashback', 'Rewards program and cashback')
     .addTag('GnosisPay - Transactions', 'Transaction history and details')
     .addTag('GnosisPay - Webhooks', 'Webhook configuration and management')

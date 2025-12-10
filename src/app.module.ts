@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { GnosisPayModule } from './gnosispay/gnosispay.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { GnosisPayModule } from './gnosispay/gnosispay.module';
     AuthModule,
     UsersModule,
     GnosisPayModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

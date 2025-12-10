@@ -1,9 +1,27 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+} from '@nestjs/swagger';
 import { GnosisPayHttpService } from '../services/gnosispay-http.service';
 import { GnosisPayAuthGuard } from '../../common/guards/gnosispay-auth.guard';
 import { GnosisPayToken } from '../../common/decorators/gnosispay-token.decorator';
-import { CreateWebhookDto, UpdateWebhookDto } from '../../common/dto/gnosispay-base.dto';
+import {
+  CreateWebhookDto,
+  UpdateWebhookDto,
+} from '../../common/dto/gnosispay-base.dto';
 
 @ApiTags('GnosisPay - Webhooks')
 @Controller('api/v1/webhooks')
@@ -69,8 +87,14 @@ export class GnosisPayWebhooksController {
 
   // ===== LOW PRIORITY - WEBHOOKS PARTNER ENDPOINTS =====
   @Get('message/:partnerId')
-  @ApiParam({ name: 'partnerId', description: 'Partner ID for webhook subscription' })
-  @ApiOperation({ summary: 'Get message to sign for webhook subscription (partner integration)' })
+  @ApiParam({
+    name: 'partnerId',
+    description: 'Partner ID for webhook subscription',
+  })
+  @ApiOperation({
+    summary:
+      'Get message to sign for webhook subscription (partner integration)',
+  })
   @ApiResponse({
     status: 200,
     description: 'Signing message retrieved successfully',
@@ -91,7 +115,10 @@ export class GnosisPayWebhooksController {
   }
 
   @Post('subscribe/:partnerId')
-  @ApiParam({ name: 'partnerId', description: 'Partner ID to subscribe webhooks for' })
+  @ApiParam({
+    name: 'partnerId',
+    description: 'Partner ID to subscribe webhooks for',
+  })
   @ApiOperation({ summary: 'Subscribe to webhooks for partner integration' })
   @ApiResponse({
     status: 201,
@@ -101,7 +128,11 @@ export class GnosisPayWebhooksController {
         subscriptionId: { type: 'string', description: 'Subscription ID' },
         partnerId: { type: 'string' },
         url: { type: 'string', description: 'Webhook endpoint URL' },
-        events: { type: 'array', items: { type: 'string' }, description: 'Subscribed events' },
+        events: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Subscribed events',
+        },
         status: { type: 'string', enum: ['active', 'inactive'] },
       },
     },

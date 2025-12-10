@@ -2,7 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 
 export class AuthEntity {
-  @ApiProperty({ example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...', description: 'JWT access token' })
+  @ApiProperty({
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+    description: 'JWT access token',
+  })
   accessToken: string;
 
   @ApiProperty({

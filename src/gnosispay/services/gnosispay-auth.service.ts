@@ -14,7 +14,11 @@ export class GnosisPayAuthService {
    * @param domain - Domain of your application
    * @returns JWT token for GnosisPay API
    */
-  async authenticateWithSIWE(privateKey: string, address: string, domain: string): Promise<string> {
+  async authenticateWithSIWE(
+    privateKey: string,
+    address: string,
+    domain: string,
+  ): Promise<string> {
     // Step 1: Get nonce from GnosisPay
     const nonce = await this.gnosisPayHttp.generateNonce();
 
@@ -36,7 +40,10 @@ export class GnosisPayAuthService {
     const signature = await wallet.signMessage(message);
 
     // Step 4: Verify challenge with GnosisPay
-    const response = await this.gnosisPayHttp.verifyChallenge(message, signature);
+    const response = await this.gnosisPayHttp.verifyChallenge(
+      message,
+      signature,
+    );
 
     return response.token;
   }
@@ -52,13 +59,23 @@ export class GnosisPayAuthService {
     marketingCampaign?: string,
     partnerId?: string,
   ): Promise<{ id: string; token: string; hasSignedUp: boolean }> {
-    return await this.gnosisPayHttp.signup(token, email, otp, referralCode, marketingCampaign, partnerId);
+    return await this.gnosisPayHttp.signup(
+      token,
+      email,
+      otp,
+      referralCode,
+      marketingCampaign,
+      partnerId,
+    );
   }
 
   /**
    * Generate authentication URL for frontend
    */
-  generateAuthUrl(address: string, domain: string): { message: string; nonce: string } {
+  generateAuthUrl(
+    address: string,
+    domain: string,
+  ): { message: string; nonce: string } {
     // This would be used in a frontend flow
     // For now, we return a placeholder
     return {

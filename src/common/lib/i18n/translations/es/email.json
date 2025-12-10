@@ -1,0 +1,508 @@
+{
+  "footer": {
+    "rights": "Todos los derechos reservados"
+  },
+  "welcome": {
+    "subject": "Bienvenido a PortalFi",
+    "preview": "Bienvenido a PortalFi",
+    "heading": "¡Bienvenido a PortalFi!",
+    "cta": {
+      "label": "Explorar PortalFi",
+      "subtitle": "Desbloquea todo el potencial de PortalFi"
+    },
+    "body": {
+      "intro": "Hola {{name}}, ahora puedes depositar, bloquear y gestionar tus activos DeFi de forma rápida, segura y sencilla.",
+      "details": "Empieza a ganar recompensas, enviar fondos y desbloquear todo el potencial del ecosistema, todo en un solo lugar."
+    }
+  },
+  "loginVerification": {
+    "subject": "Verifica tu inicio de sesión",
+    "preview": "Verifica tu inicio de sesión",
+    "heading": "Verifica tu inicio de sesión",
+    "body": {
+      "intro": "Hola {{name}}, hemos recibido una solicitud para iniciar sesión en tu cuenta de PortalFi. Usa el siguiente código OTP para continuar:",
+      "codeLabel": "Código OTP"
+    },
+    "cta": {
+      "label": "Iniciar sesión ahora"
+    },
+    "meta": {
+      "expires": "Caduca en {{minutes}} minutos. Ignora este correo si no lo solicitaste."
+    }
+  },
+  "passwordChanged": {
+    "subject": "¡Tu contraseña ha sido actualizada!",
+    "preview": "Tu contraseña se ha cambiado correctamente",
+    "heading": "¡Tu contraseña ha sido actualizada!",
+    "body": {
+      "title": "Información importante:",
+      "bullets": {
+        "dateTime": "Fecha y hora del cambio: {{dateTime}}",
+        "location": "Ubicación del cambio: {{location}}",
+        "notYou": "¿No fuiste tú? Restablece tu contraseña de inmediato usando el enlace de abajo."
+      }
+    },
+    "cta": {
+      "label": "Restablecer contraseña"
+    },
+    "meta": {
+      "hint": "Por tu seguridad, revisa la actividad de tu cuenta para asegurarte de que todo se vea correcto."
+    }
+  },
+  "newDeviceDetected": {
+    "subject": "Nuevo dispositivo detectado",
+    "preview": "Nuevo dispositivo detectado",
+    "heading": "Nuevo dispositivo detectado",
+    "body": {
+      "intro": "Hola {{name}}, detectamos un intento de inicio de sesión en tu cuenta de PortalFi desde un nuevo dispositivo.",
+      "confirm": "Si fuiste tú, confirma para continuar.",
+      "secureHint": "Si no fuiste tú, protege tu cuenta."
+    },
+    "cta": {
+      "label": "Confirmar inicio de sesión"
+    }
+  },
+  "paymentReceived": {
+    "subject": "Pago recibido",
+    "preview": "Pago recibido",
+    "heading": "¡Pago recibido!",
+    "body": {
+      "intro": "Hola {{name}}, ¡buenas noticias! Acabas de recibir un pago en tu cuenta de PortalFi.",
+      "amountLabel": "Importe recibido",
+      "sourceLabel": "Origen del pago",
+      "detailsHint": "Consulta más detalles sobre tu pago."
+    },
+    "cta": {
+      "label": "Ver detalles"
+    }
+  },
+  "paymentSent": {
+    "subject": "Pago enviado correctamente",
+    "preview": "Pago enviado correctamente",
+    "heading": "¡Pago enviado correctamente!",
+    "body": {
+      "intro": "Hola {{name}}, tu pago se ha enviado correctamente desde tu cuenta de PortalFi.",
+      "amountLabel": "Importe enviado",
+      "destinationLabel": "Destino del pago",
+      "detailsHint": "Consulta todos los detalles de tu transferencia."
+    },
+    "cta": {
+      "label": "Ver detalles"
+    }
+  },
+  "transactionDeclined": {
+    "subject": "Transacción rechazada",
+    "preview": "Transacción rechazada",
+    "heading": "Transacción rechazada",
+    "body": {
+      "intro": "Hola {{name}}, tu pago intentado en PortalFi no pudo completarse.",
+      "amountLabel": "Importe intentado",
+      "destinationLabel": "Destino del pago",
+      "detailsHint": "Revisa los detalles, vuelve a intentarlo o contacta con soporte."
+    },
+    "cta": {
+      "label": "Reintentar pago"
+    }
+  },
+  "depositSuccessful": {
+    "subject": "Depósito exitoso",
+    "preview": "Depósito exitoso",
+    "heading": "Depósito exitoso",
+    "body": {
+      "intro": "Hola {{name}}, tu depósito en PortalFi se ha procesado correctamente.",
+      "amountLabel": "Importe depositado",
+      "methodLabel": "Método de depósito",
+      "detailsHint": "Utiliza tu saldo para invertir, enviar o ganar."
+    },
+    "cta": {
+      "label": "Ver detalles del depósito"
+    }
+  },
+  "depositFailed": {
+    "subject": "Depósito fallido",
+    "preview": "Depósito fallido",
+    "heading": "Depósito fallido",
+    "body": {
+      "intro": "Hola {{name}}, tu depósito en PortalFi no pudo procesarse. Revisa los datos e inténtalo de nuevo.",
+      "amountLabel": "Importe intentado",
+      "methodLabel": "Método de depósito",
+      "detailsHint": "Asegúrate de que tu depósito se complete sin problemas."
+    },
+    "cta": {
+      "label": "Reintentar depósito"
+    }
+  },
+  "cardCreated": {
+    "subject": "Tu nueva tarjeta te está esperando",
+    "preview": "Tu nueva tarjeta de PortalFi está lista para usarse",
+    "heading": "¡Tu nueva tarjeta te está esperando!",
+    "body": {
+      "subtitle": "Actívala y lleva tu dinero al siguiente nivel.",
+      "intro": "Hola {{name}}, tu nueva tarjeta está lista para usarse.",
+      "details": "Actívala con un solo clic y empieza a pagar, invertir y mover tu dinero."
+    },
+    "cta": {
+      "label": "Activar tarjeta"
+    },
+    "meta": {
+      "hint": "Empieza a usar tu tarjeta al instante."
+    }
+  },
+  "cardBlocked": {
+    "subject": "Tu tarjeta ha sido bloqueada",
+    "preview": "Tu tarjeta de PortalFi ha sido bloqueada por motivos de seguridad",
+    "heading": "Tu tarjeta ha sido bloqueada",
+    "body": {
+      "intro": "Hola {{name}}, por motivos de seguridad, tu tarjeta ha sido bloqueada.",
+      "details": "Si no solicitaste esta acción, revisa tu cuenta y contacta con nuestro equipo de soporte."
+    },
+    "cta": {
+      "label": "Revisar tarjeta"
+    },
+    "meta": {
+      "hint": "Asegúrate de que todo esté en orden."
+    }
+  },
+  "cardDeleted": {
+    "subject": "Tu tarjeta ha sido eliminada",
+    "preview": "Tu tarjeta de PortalFi ha sido eliminada",
+    "heading": "Tu tarjeta ha sido eliminada",
+    "body": {
+      "intro": "Hola {{name}}, acabas de eliminar tu tarjeta. Si fue intencional, todo está listo.",
+      "details": "Si no fue así, revisa tu actividad y solicita una nueva tarjeta de inmediato."
+    },
+    "cta": {
+      "label": "Obtener nueva tarjeta"
+    },
+    "meta": {
+      "hint": "Activa otra tarjeta y sigue adelante."
+    }
+  },
+  "cardExpired": {
+    "subject": "Tu tarjeta ha caducado",
+    "preview": "Tu tarjeta de PortalFi ha caducado",
+    "heading": "Tu tarjeta ha caducado",
+    "body": {
+      "intro": "Hola {{name}}, tu tarjeta ha llegado a su fecha de caducidad y ya no puede usarse para pagos o retiradas.",
+      "details": "No te preocupes, solicita una nueva y actívala en segundos."
+    },
+    "cta": {
+      "label": "Obtener nueva tarjeta"
+    },
+    "meta": {
+      "hint": "Consigue tu nueva tarjeta fácilmente."
+    }
+  },
+  "withdrawalFailed": {
+    "subject": "Retiro fallido",
+    "preview": "Retiro fallido",
+    "heading": "Algo salió mal con tu retiro",
+    "body": {
+      "intro": "Hola {{name}}, tu solicitud de retiro no pudo procesarse.",
+      "details": "Puede deberse a datos incorrectos, saldo insuficiente o un problema con el método seleccionado."
+    },
+    "cta": {
+      "label": "Reintentar retiro"
+    },
+    "meta": {
+      "hint": "Revisa tu panel y vuelve a intentarlo."
+    }
+  },
+  "withdrawalSuccessful": {
+    "subject": "Retiro exitoso",
+    "preview": "Retiro exitoso",
+    "heading": "¡Tu retiro se ha realizado con éxito!",
+    "body": {
+      "intro": "Hola {{name}}, todo listo. Tu retiro se procesó correctamente y tus fondos van en camino.",
+      "details": "Revisa tu panel para confirmar los detalles de la transacción."
+    },
+    "cta": {
+      "label": "Ver detalles"
+    },
+    "meta": {
+      "hint": "Revisa los detalles en segundos."
+    }
+  },
+  "referralReward": {
+    "subject": "Has conseguido una recompensa",
+    "preview": "Has conseguido una recompensa por invitar a un amigo a PortalFi",
+    "heading": "Has conseguido una recompensa",
+    "body": {
+      "intro": "Hola {{name}}, ¡lo lograste! Gracias a tu invitación, un amigo se unió a PortalFi y tu recompensa está lista.",
+      "details": "Reclámala ahora y sigue acumulando beneficios."
+    },
+    "cta": {
+      "label": "Canjear recompensa"
+    },
+    "meta": {
+      "hint": "Suma más beneficios con cada referido."
+    }
+  },
+  "newPhoneAdded": {
+    "subject": "Nuevo teléfono añadido",
+    "preview": "Se ha añadido un nuevo teléfono a tu cuenta de PortalFi",
+    "heading": "Nuevo teléfono añadido",
+    "body": {
+      "intro": "Hola {{name}}, se ha añadido correctamente un nuevo teléfono a tu cuenta de PortalFi. Si fuiste tú, no necesitas hacer nada.",
+      "details": "Si no reconoces esta acción, asegura tu cuenta de inmediato."
+    },
+    "cta": {
+      "label": "Asegurar cuenta"
+    },
+    "meta": {
+      "hint": "Mantente seguro — PortalFi protege tus activos."
+    }
+  },
+  "phoneRemoved": {
+    "subject": "Teléfono eliminado",
+    "preview": "Se ha eliminado un teléfono de tu cuenta de PortalFi",
+    "heading": "Teléfono eliminado",
+    "body": {
+      "intro": "Hola {{name}}, se ha eliminado recientemente un teléfono de tu cuenta de PortalFi. Si fuiste tú, todo está en orden.",
+      "details": "Si no lo hiciste, te recomendamos revisar la configuración de seguridad de tu cuenta ahora mismo."
+    },
+    "cta": {
+      "label": "Revisar seguridad"
+    },
+    "meta": {
+      "hint": "Tu seguridad es nuestra prioridad — PortalFi protege tu acceso."
+    }
+  },
+  "twoFactorDisabled": {
+    "subject": "2FA desactivada",
+    "preview": "La autenticación en dos pasos se ha desactivado en tu cuenta de PortalFi",
+    "heading": "2FA desactivada",
+    "body": {
+      "intro": "Hola {{name}}, la autenticación en dos pasos (2FA) se ha desactivado en tu cuenta de PortalFi. Si tú hiciste este cambio, no necesitas hacer nada.",
+      "details": "Si no fuiste tú, vuelve a activar 2FA desde la configuración de tu cuenta."
+    },
+    "cta": {
+      "label": "Configuración de la cuenta"
+    },
+    "meta": {
+      "hint": "Tu seguridad es lo primero — PortalFi protege tus activos."
+    }
+  },
+  "twoFactorEnabled": {
+    "subject": "2FA activada",
+    "preview": "La autenticación en dos pasos se ha activado en tu cuenta de PortalFi",
+    "heading": "2FA activada",
+    "body": {
+      "intro": "Hola {{name}}, la autenticación en dos pasos (2FA) se ha activado correctamente en tu cuenta de PortalFi.",
+      "details": "A partir de ahora, cada inicio de sesión requerirá tu código de verificación para mayor protección."
+    },
+    "cta": {
+      "label": "Configuración de la cuenta"
+    },
+    "meta": {
+      "hint": "Tu seguridad es nuestra prioridad — PortalFi protege tu acceso."
+    }
+  },
+  "activityDetected": {
+    "subject": "Actividad detectada",
+    "preview": "Se ha detectado actividad inusual en tu cuenta de PortalFi",
+    "heading": "Actividad detectada",
+    "body": {
+      "intro": "Hola {{name}}, hemos detectado un movimiento inusual en tu cuenta de PortalFi. Para tu seguridad, revisa tus transacciones recientes y asegúrate de que todo sea correcto.",
+      "details": "Si no reconoces esta acción, cambia tu contraseña y activa 2FA para mantener tu cuenta protegida."
+    },
+    "cta": {
+      "label": "Revisar actividad"
+    },
+    "meta": {
+      "hint": "Tu seguridad es nuestra prioridad — PortalFi protege tu acceso."
+    }
+  },
+  "referralJoined": {
+    "subject": "¡Tu referido se acaba de unir!",
+    "preview": "Un amigo que invitaste se acaba de unir a PortalFi",
+    "heading": "¡Tu referido se acaba de unir!",
+    "body": {
+      "intro": "Hola {{name}}, buenas noticias: alguien a quien invitaste acaba de registrarse en PortalFi. Pronto podrás seguir su actividad y las recompensas que genere en tu panel de referidos.",
+      "details": "Sigue compartiendo tu enlace y haz crecer tu comunidad."
+    },
+    "cta": {
+      "label": "Ver mis referidos"
+    },
+    "meta": {
+      "hint": "Gana más invitando a más personas — PortalFi premia tu impacto."
+    }
+  },
+  "invitationReceived": {
+    "subject": "Has recibido una invitación",
+    "preview": "Has sido invitado a unirte a PortalFi",
+    "heading": "Has recibido una invitación",
+    "body": {
+      "intro": "Hola {{name}}, un amigo te ha invitado a PortalFi, la plataforma donde las finanzas digitales son más simples, seguras y conectadas.",
+      "details": "Crea tu cuenta en minutos y empieza a explorar todo lo que PortalFi tiene para ofrecer."
+    },
+    "cta": {
+      "label": "Unirme a PortalFi"
+    },
+    "meta": {
+      "hint": "Acepta la invitación y comienza tu experiencia."
+    }
+  },
+  "verifyIdentity": {
+    "subject": "Verifica tu identidad",
+    "preview": "Completa tu verificación KYC en PortalFi",
+    "heading": "Verifica tu identidad",
+    "body": {
+      "intro": "Hola {{name}}, tu cuenta de PortalFi está casi lista. Solo falta un último paso: completar tu verificación KYC.",
+      "details": "Esto nos ayuda a mantener la plataforma segura y te da acceso completo a pagos, recompensas y transferencias."
+    },
+    "cta": {
+      "label": "Completar verificación"
+    },
+    "meta": {
+      "hint": "Solo toma 2 minutos; después tu cuenta estará totalmente activa."
+    }
+  },
+  "kycCompleted": {
+    "subject": "KYC completado con éxito",
+    "preview": "Tu verificación KYC ha sido aprobada y tu cuenta está totalmente activa",
+    "heading": "KYC completado con éxito",
+    "body": {
+      "intro": "Hola {{name}}, tu verificación KYC ha sido aprobada y tu cuenta ha quedado completamente activada.",
+      "details": "Ahora puedes acceder a todas las funciones de PortalFi, incluidos pagos, recompensas y transferencias, de forma segura y sin límites."
+    },
+    "cta": {
+      "label": "Explorar PortalFi"
+    },
+    "meta": {
+      "hint": "Empieza a usar todas las herramientas y beneficios disponibles para usuarios verificados."
+    }
+  },
+  "kycNotCompleted": {
+    "subject": "Verificación no completada",
+    "preview": "Tu verificación KYC no pudo completarse correctamente",
+    "heading": "Verificación no completada",
+    "body": {
+      "intro": "Hola {{name}}, tu verificación KYC no pudo completarse correctamente.",
+      "details": "Esto puede deberse a un documento caducado, imágenes poco claras o información incompleta. No te preocupes, puedes intentarlo de nuevo en cualquier momento."
+    },
+    "cta": {
+      "label": "Reintentar verificación"
+    },
+    "meta": {
+      "hint": "Sigue el enlace para revisar tus datos y volver a subir tus documentos."
+    }
+  },
+  "preventiveAccountLock": {
+    "subject": "Bloqueo preventivo de cuenta",
+    "preview": "Tu cuenta se ha bloqueado temporalmente por tu seguridad",
+    "heading": "Bloqueo preventivo de cuenta",
+    "body": {
+      "intro": "Hola {{name}}, tu cuenta se ha bloqueado temporalmente por tu seguridad.",
+      "details": "Hemos detectado actividad inusual en tu cuenta de PortalFi y la hemos bloqueado temporalmente como medida de precaución. Este bloqueo evita accesos no autorizados mientras verificamos tu identidad. Puedes desbloquear tu cuenta fácilmente desde la configuración de tu cuenta o contactando con nuestro equipo de soporte."
+    },
+    "cta": {
+      "label": "Desbloquear cuenta"
+    },
+    "meta": {
+      "hint": "Tu seguridad es lo primero — PortalFi protege tus activos."
+    }
+  },
+  "cardPhysicalCreated": {
+    "subject": "¡Tarjeta creada con éxito!",
+    "preview": "Tu nueva tarjeta física se ha creado y se está preparando para el envío",
+    "heading": "¡Tarjeta creada con éxito! 🎉",
+    "body": {
+      "intro": "Hola {{name}}, hemos creado tu nueva tarjeta física y ya está lista para salir del sistema y comenzar su camino hacia ti.",
+      "details": "Verifica que la dirección de envío registrada sea correcta para evitar retrasos. En breve recibirás un correo con el número de seguimiento y la fecha estimada de llegada."
+    },
+    "cta": {
+      "label": "Ver estado del envío"
+    },
+    "meta": {
+      "hint": "¡Estamos emocionados de que la tengas pronto!"
+    }
+  },
+  "cardPhysicalShipped": {
+    "subject": "Tu tarjeta física va en camino",
+    "preview": "Tu tarjeta física ha sido enviada y va en camino",
+    "heading": "Tu tarjeta física va en camino",
+    "body": {
+      "intro": "¡Buenas noticias! Tu tarjeta física ha sido enviada y va en camino a {{destination}}.",
+      "details": "Haz seguimiento del envío para saber exactamente cuándo llegará."
+    },
+    "cta": {
+      "label": "Seguir mi tarjeta"
+    },
+    "meta": {
+      "hint": "Estamos deseando verte pagar con ella."
+    }
+  },
+  "cardFrozenByUser": {
+    "subject": "Tu tarjeta está congelada",
+    "preview": "Hemos confirmado tu solicitud de congelar tu tarjeta física",
+    "heading": "Tu tarjeta está congelada ❄️",
+    "body": {
+      "intro": "Hola {{name}}, hemos confirmado tu solicitud: tu tarjeta física está congelada. Tu dinero está seguro; nadie puede usar tu tarjeta mientras permanezca en este estado.",
+      "bullets": {
+        "online": "Todas las compras en línea están bloqueadas.",
+        "pos": "Los pagos en tiendas físicas han sido denegados.",
+        "atm": "Los retiros en cajeros automáticos no funcionarán."
+      }
+    },
+    "cta": {
+      "label": "Configuración de la tarjeta"
+    },
+    "meta": {
+      "hint": "Revisa y gestiona la configuración de tu tarjeta en cualquier momento."
+    }
+  },
+  "cardFrozenBySystem": {
+    "subject": "Alerta de seguridad: tu tarjeta ha sido congelada",
+    "preview": "Hemos congelado tu tarjeta física debido a actividad inusual",
+    "heading": "Alerta de seguridad: tu tarjeta ha sido congelada",
+    "body": {
+      "intro": "Hola {{name}}, para proteger tu cuenta hemos congelado tu tarjeta física debido a actividad inusual. Tu dinero está seguro.",
+      "details": "¿Fuiste tú? Si la actividad fue legítima, puedes descongelarla al instante desde la app.",
+      "steps": {
+        "goToCards": "Ve a \"Tarjetas\"",
+        "goToSettings": "Luego a \"Configuración\"",
+        "tapUnfreeze": "Toca \"Descongelar\""
+      }
+    },
+    "cta": {
+      "label": "Configuración de la tarjeta"
+    },
+    "meta": {
+      "hint": "Si crees que tu seguridad se ha visto comprometida, ponte en contacto con nosotros de inmediato en Support Link."
+    }
+  },
+  "cardActivated": {
+    "subject": "¡Activación completada! Ya puedes usar tu tarjeta.",
+    "preview": "Tu tarjeta física se ha activado de forma segura y está lista para usarse",
+    "heading": "¡Activación completada! Ya puedes usar tu tarjeta. 🎉",
+    "body": {
+      "intro": "Hola {{name}}, ¡enhorabuena! Acabas de activar de forma segura tu tarjeta física. Ya estás listo para usarla.",
+      "bullets": {
+        "atm": "Usa cualquier cajero automático para tus retiros.",
+        "online": "Úsala como respaldo para tus compras en línea o pagos digitales."
+      }
+    },
+    "cta": {
+      "label": "Ver todos los beneficios"
+    },
+    "meta": {
+      "hint": "Tu tarjeta está 100 % operativa y protegida por los controles de seguridad de la app."
+    }
+  },
+  "cardPhysicalDeleted": {
+    "subject": "¡Tarjeta eliminada!",
+    "preview": "Tu tarjeta física ha sido eliminada de tu cuenta",
+    "heading": "¡Tarjeta eliminada! 🗑️",
+    "body": {
+      "intro": "Hola {{name}}, hemos procesado tu solicitud. Tu tarjeta física terminada en {{last4}} se ha eliminado de tu cuenta.",
+      "details": "Si esta acción fue un error, ponte en contacto con nosotros de inmediato a través del chat de soporte."
+    },
+    "cta": {
+      "label": "Abrir centro de ayuda"
+    },
+    "meta": {
+      "hint": "Gracias por mantener tu cuenta segura."
+    }
+  }
+}

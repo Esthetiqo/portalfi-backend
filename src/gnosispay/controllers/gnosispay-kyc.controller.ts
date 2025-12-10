@@ -1,8 +1,17 @@
 import { Controller, Post, Body, Get, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { GnosisPayKycService } from '../services/gnosispay-kyc.service';
 import { GnosisPayHttpService } from '../services/gnosispay-http.service';
-import { SubmitKycAnswersDto, VerifyPhoneDto, VerifyPhoneOtpDto } from '../dto/kyc.dto';
+import {
+  SubmitKycAnswersDto,
+  VerifyPhoneDto,
+  VerifyPhoneOtpDto,
+} from '../dto/kyc.dto';
 import { GnosisPayAuthGuard } from '../../common/guards/gnosispay-auth.guard';
 import { GnosisPayToken } from '../../common/decorators/gnosispay-token.decorator';
 import { KycQuestion } from '../types';
@@ -18,15 +27,25 @@ export class GnosisPayKycController {
   ) {}
 
   @Get('questions')
-  @ApiOperation({ summary: 'Get KYC questions (Source of Funds questionnaire)' })
-  @ApiResponse({ status: 200, description: 'KYC questions retrieved successfully' })
-  async getKycQuestions(@GnosisPayToken() token: string): Promise<KycQuestion[]> {
+  @ApiOperation({
+    summary: 'Get KYC questions (Source of Funds questionnaire)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'KYC questions retrieved successfully',
+  })
+  async getKycQuestions(
+    @GnosisPayToken() token: string,
+  ): Promise<KycQuestion[]> {
     return await this.gnosisPayKycService.getKycQuestions(token);
   }
 
   @Post('answers')
   @ApiOperation({ summary: 'Submit KYC answers' })
-  @ApiResponse({ status: 200, description: 'KYC answers submitted successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'KYC answers submitted successfully',
+  })
   async submitKycAnswers(
     @GnosisPayToken() token: string,
     @Body() dto: SubmitKycAnswersDto,
@@ -36,23 +55,36 @@ export class GnosisPayKycController {
 
   @Get('access-token')
   @ApiOperation({ summary: 'Get Sumsub access token for KYC verification' })
-  @ApiResponse({ status: 200, description: 'Access token retrieved successfully' })
-  async getKycAccessToken(@GnosisPayToken() token: string): Promise<{ token: string }> {
+  @ApiResponse({
+    status: 200,
+    description: 'Access token retrieved successfully',
+  })
+  async getKycAccessToken(
+    @GnosisPayToken() token: string,
+  ): Promise<{ token: string }> {
     const accessToken = await this.gnosisPayKycService.getKycAccessToken(token);
     return { token: accessToken };
   }
 
   @Get('status')
   @ApiOperation({ summary: 'Get KYC status for the current user' })
-  @ApiResponse({ status: 200, description: 'KYC status retrieved successfully' })
-  async getKycStatus(@GnosisPayToken() token: string): Promise<{ kycStatus: string }> {
+  @ApiResponse({
+    status: 200,
+    description: 'KYC status retrieved successfully',
+  })
+  async getKycStatus(
+    @GnosisPayToken() token: string,
+  ): Promise<{ kycStatus: string }> {
     const status = await this.gnosisPayKycService.getKycStatus(token);
     return { kycStatus: status };
   }
 
   @Get('flow-status')
   @ApiOperation({ summary: 'Get complete KYC flow status (custom endpoint)' })
-  @ApiResponse({ status: 200, description: 'KYC flow status retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'KYC flow status retrieved successfully',
+  })
   async getKycFlowStatus(@GnosisPayToken() token: string): Promise<{
     kycStatus: string;
     isSourceOfFundsAnswered: boolean;
@@ -73,7 +105,10 @@ export class GnosisPayKycController {
         applicantId: { type: 'string', description: 'Sumsub applicant ID' },
         reviewStatus: { type: 'string', description: 'Review status' },
         reviewResult: { type: 'object', description: 'Review result details' },
-        integrationConfig: { type: 'object', description: 'Integration configuration' },
+        integrationConfig: {
+          type: 'object',
+          description: 'Integration configuration',
+        },
       },
     },
   })
@@ -104,24 +139,38 @@ export class GnosisPayKycController {
 
   // ===== MEDIUM PRIORITY - KYC PARTNER INTEGRATION =====
   @Post('import-partner-applicant')
-  @ApiOperation({ summary: 'Retrieve KYC Sharing Token for partner applicant import' })
+  @ApiOperation({
+    summary: 'Retrieve KYC Sharing Token for partner applicant import',
+  })
   @ApiResponse({
     status: 200,
     description: 'Partner applicant imported successfully',
     schema: {
       properties: {
-        sharingToken: { type: 'string', description: 'KYC sharing token for partner integration' },
+        sharingToken: {
+          type: 'string',
+          description: 'KYC sharing token for partner integration',
+        },
         applicantId: { type: 'string', description: 'Imported applicant ID' },
         status: { type: 'string', description: 'Import status' },
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Invalid applicant ID or partner not authorized' })
-  @ApiResponse({ status: 404, description: 'Applicant not found in partner system' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid applicant ID or partner not authorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Applicant not found in partner system',
+  })
   async importPartnerApplicant(
     @GnosisPayToken() token: string,
     @Body() body: { applicantId: string },
   ): Promise<any> {
-    return await this.httpService.importPartnerApplicant(token, body.applicantId);
+    return await this.httpService.importPartnerApplicant(
+      token,
+      body.applicantId,
+    );
   }
 }

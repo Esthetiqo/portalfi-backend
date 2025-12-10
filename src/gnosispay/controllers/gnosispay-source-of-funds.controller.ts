@@ -1,5 +1,10 @@
 import { Controller, Post, Body, Get, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { GnosisPayHttpService } from '../services/gnosispay-http.service';
 import { GnosisPayAuthGuard } from '../../common/guards/gnosispay-auth.guard';
 import { GnosisPayToken } from '../../common/decorators/gnosispay-token.decorator';
@@ -22,9 +27,20 @@ export class GnosisPaySourceOfFundsController {
         properties: {
           id: { type: 'string', description: 'Question ID' },
           question: { type: 'string', description: 'Question text' },
-          type: { type: 'string', enum: ['single_choice', 'multiple_choice', 'text'], description: 'Question type' },
-          required: { type: 'boolean', description: 'Whether question is required' },
-          options: { type: 'array', items: { type: 'string' }, description: 'Available options for choice questions' },
+          type: {
+            type: 'string',
+            enum: ['single_choice', 'multiple_choice', 'text'],
+            description: 'Question type',
+          },
+          required: {
+            type: 'boolean',
+            description: 'Whether question is required',
+          },
+          options: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Available options for choice questions',
+          },
         },
       },
     },
@@ -43,12 +59,18 @@ export class GnosisPaySourceOfFundsController {
     description: 'Source of Funds answers submitted successfully',
     schema: {
       properties: {
-        success: { type: 'boolean', description: 'Whether submission was successful' },
+        success: {
+          type: 'boolean',
+          description: 'Whether submission was successful',
+        },
         status: { type: 'string', description: 'Submission status' },
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Invalid answers or missing required fields' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid answers or missing required fields',
+  })
   async submitSourceOfFunds(
     @GnosisPayToken() token: string,
     @Body() answers: any,

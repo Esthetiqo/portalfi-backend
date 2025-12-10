@@ -1,5 +1,10 @@
 import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { GnosisPayHttpService } from '../services/gnosispay-http.service';
 import { GnosisPayAuthGuard } from '../../common/guards/gnosispay-auth.guard';
 import { GnosisPayToken } from '../../common/decorators/gnosispay-token.decorator';
@@ -14,7 +19,10 @@ export class GnosisPayRewardsController {
 
   @Get()
   @ApiOperation({ summary: 'Get rewards and cashback information' })
-  @ApiResponse({ status: 200, description: 'Rewards information retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Rewards information retrieved successfully',
+  })
   async getRewards(@GnosisPayToken() token: string): Promise<any> {
     return await this.httpService.getRewards(token);
   }
@@ -50,7 +58,10 @@ export class GnosisPayCashbackController {
     schema: {
       properties: {
         totalEarned: { type: 'string', description: 'Total cashback earned' },
-        available: { type: 'string', description: 'Available cashback balance' },
+        available: {
+          type: 'string',
+          description: 'Available cashback balance',
+        },
         pending: { type: 'string', description: 'Pending cashback' },
         currency: { type: 'string', description: 'Currency code' },
       },
@@ -76,10 +87,20 @@ export class GnosisPayUserTermsController {
     description: 'Terms status retrieved successfully',
     schema: {
       properties: {
-        accepted: { type: 'boolean', description: 'Whether terms have been accepted' },
+        accepted: {
+          type: 'boolean',
+          description: 'Whether terms have been accepted',
+        },
         version: { type: 'string', description: 'Current terms version' },
-        acceptedAt: { type: 'string', format: 'date-time', description: 'When terms were accepted' },
-        latestVersion: { type: 'string', description: 'Latest available terms version' },
+        acceptedAt: {
+          type: 'string',
+          format: 'date-time',
+          description: 'When terms were accepted',
+        },
+        latestVersion: {
+          type: 'string',
+          description: 'Latest available terms version',
+        },
       },
     },
   })

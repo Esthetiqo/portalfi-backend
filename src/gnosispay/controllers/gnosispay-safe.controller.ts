@@ -1,9 +1,27 @@
-import { Controller, Get, Post, Delete, Patch, Body, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Patch,
+  Body,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { GnosisPayHttpService } from '../services/gnosispay-http.service';
 import { GnosisPayAuthGuard } from '../../common/guards/gnosispay-auth.guard';
 import { GnosisPayToken } from '../../common/decorators/gnosispay-token.decorator';
-import { SetSafeCurrencyDto, CreateSafeTransactionDto } from '../../common/dto/gnosispay-base.dto';
+import {
+  SetSafeCurrencyDto,
+  CreateSafeTransactionDto,
+} from '../../common/dto/gnosispay-base.dto';
 
 @ApiTags('GnosisPay - Safe Management')
 @Controller('api/v1/safe')
@@ -25,8 +43,13 @@ export class GnosisPaySafeController {
 
   @Get('supported-currencies')
   @ApiOperation({ summary: 'Get list of supported currencies' })
-  @ApiResponse({ status: 200, description: 'Supported currencies retrieved successfully' })
-  async getSupportedCurrencies(@GnosisPayToken() token: string): Promise<any[]> {
+  @ApiResponse({
+    status: 200,
+    description: 'Supported currencies retrieved successfully',
+  })
+  async getSupportedCurrencies(
+    @GnosisPayToken() token: string,
+  ): Promise<any[]> {
     return await this.httpService.getSupportedCurrencies(token);
   }
 
@@ -49,13 +72,25 @@ export class GnosisPaySafeController {
     description: 'Safe deployment initiated successfully',
     schema: {
       properties: {
-        status: { type: 'string', enum: ['pending', 'deploying', 'deployed', 'failed'] },
-        safeAddress: { type: 'string', description: 'Safe contract address (if deployed)' },
-        transactionHash: { type: 'string', description: 'Deployment transaction hash' },
+        status: {
+          type: 'string',
+          enum: ['pending', 'deploying', 'deployed', 'failed'],
+        },
+        safeAddress: {
+          type: 'string',
+          description: 'Safe contract address (if deployed)',
+        },
+        transactionHash: {
+          type: 'string',
+          description: 'Deployment transaction hash',
+        },
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Safe already exists or deployment failed' })
+  @ApiResponse({
+    status: 400,
+    description: 'Safe already exists or deployment failed',
+  })
   async deploySafe(@GnosisPayToken() token: string): Promise<any> {
     return await this.httpService.deploySafe(token);
   }
@@ -67,7 +102,10 @@ export class GnosisPaySafeController {
     description: 'Deployment status retrieved successfully',
     schema: {
       properties: {
-        status: { type: 'string', enum: ['pending', 'deploying', 'deployed', 'failed'] },
+        status: {
+          type: 'string',
+          enum: ['pending', 'deploying', 'deployed', 'failed'],
+        },
         safeAddress: { type: 'string' },
         transactionHash: { type: 'string' },
         error: { type: 'string', description: 'Error message if failed' },
@@ -81,7 +119,10 @@ export class GnosisPaySafeController {
   @Delete('reset')
   @ApiOperation({ summary: 'Reset Safe account' })
   @ApiResponse({ status: 200, description: 'Safe reset successfully' })
-  @ApiResponse({ status: 400, description: 'Cannot reset Safe with balance or active cards' })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot reset Safe with balance or active cards',
+  })
   async resetSafe(@GnosisPayToken() token: string): Promise<void> {
     await this.httpService.resetSafe(token);
   }
@@ -133,29 +174,50 @@ export class GnosisPaySafeOwnersController {
   @Post()
   @ApiOperation({ summary: 'Add new Safe owner' })
   @ApiResponse({ status: 200, description: 'Owner added successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid owner address or signature' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid owner address or signature',
+  })
   async addSafeOwner(
     @GnosisPayToken() token: string,
     @Body() body: { newOwner: string; signature: string },
   ): Promise<any> {
-    return await this.httpService.addSafeOwner(token, body.newOwner, body.signature);
+    return await this.httpService.addSafeOwner(
+      token,
+      body.newOwner,
+      body.signature,
+    );
   }
 
   @Delete()
   @ApiOperation({ summary: 'Remove Safe owner' })
   @ApiResponse({ status: 200, description: 'Owner removed successfully' })
-  @ApiResponse({ status: 400, description: 'Cannot remove last owner or invalid signature' })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot remove last owner or invalid signature',
+  })
   async removeSafeOwner(
     @GnosisPayToken() token: string,
     @Body() body: { ownerToRemove: string; signature: string },
   ): Promise<any> {
-    return await this.httpService.removeSafeOwner(token, body.ownerToRemove, body.signature);
+    return await this.httpService.removeSafeOwner(
+      token,
+      body.ownerToRemove,
+      body.signature,
+    );
   }
 
   @Get('add/transaction-data')
   @ApiOperation({ summary: 'Get EIP-712 typed data for adding owner' })
-  @ApiQuery({ name: 'newOwner', description: 'Address of new owner to add', required: true })
-  @ApiResponse({ status: 200, description: 'Transaction data retrieved successfully' })
+  @ApiQuery({
+    name: 'newOwner',
+    description: 'Address of new owner to add',
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Transaction data retrieved successfully',
+  })
   async getAddOwnerTransactionData(
     @GnosisPayToken() token: string,
     @Query('newOwner') newOwner: string,
@@ -165,13 +227,23 @@ export class GnosisPaySafeOwnersController {
 
   @Get('remove/transaction-data')
   @ApiOperation({ summary: 'Get EIP-712 typed data for removing owner' })
-  @ApiQuery({ name: 'ownerToRemove', description: 'Address of owner to remove', required: true })
-  @ApiResponse({ status: 200, description: 'Transaction data retrieved successfully' })
+  @ApiQuery({
+    name: 'ownerToRemove',
+    description: 'Address of owner to remove',
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Transaction data retrieved successfully',
+  })
   async getRemoveOwnerTransactionData(
     @GnosisPayToken() token: string,
     @Query('ownerToRemove') ownerToRemove: string,
   ): Promise<any> {
-    return await this.httpService.getRemoveOwnerTransactionData(token, ownerToRemove);
+    return await this.httpService.getRemoveOwnerTransactionData(
+      token,
+      ownerToRemove,
+    );
   }
 }
 
@@ -226,7 +298,10 @@ export class GnosisPayAccountSetupController {
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Safe already exists or invalid chain' })
+  @ApiResponse({
+    status: 400,
+    description: 'Safe already exists or invalid chain',
+  })
   async createSafe(
     @GnosisPayToken() token: string,
     @Body() body: { chainId: number },
@@ -262,12 +337,18 @@ export class GnosisPayAccountSetupController {
     schema: {
       properties: {
         success: { type: 'boolean' },
-        transactionHash: { type: 'string', description: 'Transaction hash if applicable' },
+        transactionHash: {
+          type: 'string',
+          description: 'Transaction hash if applicable',
+        },
         status: { type: 'string', description: 'Deployment status' },
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Invalid signature or Safe not ready' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid signature or Safe not ready',
+  })
   async deploySafeModules(
     @GnosisPayToken() token: string,
     @Body() body: { signature: string },
